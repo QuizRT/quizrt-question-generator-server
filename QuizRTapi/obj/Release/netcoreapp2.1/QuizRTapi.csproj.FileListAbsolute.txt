@@ -1,0 +1,14 @@
+C:\Users\CGI\QuizRTapi\bin\Release\netcoreapp2.1\QuizRTapi.deps.json
+C:\Users\CGI\QuizRTapi\bin\Release\netcoreapp2.1\QuizRTapi.runtimeconfig.json
+C:\Users\CGI\QuizRTapi\bin\Release\netcoreapp2.1\QuizRTapi.runtimeconfig.dev.json
+C:\Users\CGI\QuizRTapi\bin\Release\netcoreapp2.1\QuizRTapi.dll
+C:\Users\CGI\QuizRTapi\bin\Release\netcoreapp2.1\QuizRTapi.pdb
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.csprojAssemblyReference.cache
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.csproj.CoreCompileInputs.cache
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.RazorAssemblyInfo.cache
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.RazorAssemblyInfo.cs
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.AssemblyInfoInputs.cache
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.AssemblyInfo.cs
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.RazorTargetAssemblyInfo.cache
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.dll
+C:\Users\CGI\QuizRTapi\obj\Release\netcoreapp2.1\QuizRTapi.pdb
