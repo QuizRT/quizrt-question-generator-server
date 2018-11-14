@@ -11507,8 +11507,8 @@
     },
     "QuestionManager/1.0.0": {
       "type": "project",
-      "path": "../QuestionManager/QuestionManager.csproj",
-      "msbuildProject": "../QuestionManager/QuestionManager.csproj"
+      "path": "../../QuestionManager/QuestionManager.csproj",
+      "msbuildProject": "../../QuestionManager/QuestionManager.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -11529,11 +11529,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\CGI\\QuizRTapi\\QuizRTapi.csproj",
+      "projectUniqueName": "C:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\QuizRTapi.csproj",
       "projectName": "QuizRTapi",
-      "projectPath": "C:\\Users\\CGI\\QuizRTapi\\QuizRTapi.csproj",
+      "projectPath": "C:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\QuizRTapi.csproj",
       "packagesPath": "C:\\Users\\CGI\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\CGI\\QuizRTapi\\obj\\",
+      "outputPath": "C:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

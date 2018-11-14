@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuestionManager\QuestionManager.csproj" />
+    <ProjectReference Include="..\..\QuestionManager\QuestionManager.csproj" />
   </ItemGroup>
 </Project>
