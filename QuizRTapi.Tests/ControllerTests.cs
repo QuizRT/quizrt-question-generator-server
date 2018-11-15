@@ -40,7 +40,7 @@ namespace QuizRTapi.Tests
 
             Assert.NotNull(actualList); // Assert
             Console.WriteLine("actualList.Count: "+actualList.Count);
-            Assert.Equal(actualList.Count , 1);
+            Assert.Equal(actualList.Count , 0);
         }
     }
 }
