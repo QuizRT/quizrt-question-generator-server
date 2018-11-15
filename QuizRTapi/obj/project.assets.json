@@ -11529,11 +11529,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\QuizRTapi.csproj",
+      "projectUniqueName": "c:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\QuizRTapi.csproj",
       "projectName": "QuizRTapi",
-      "projectPath": "C:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\QuizRTapi.csproj",
+      "projectPath": "c:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\QuizRTapi.csproj",
       "packagesPath": "C:\\Users\\CGI\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\obj\\",
+      "outputPath": "c:\\Users\\CGI\\QuizRT-Server\\QuizRTapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -11550,8 +11550,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\CGI\\QuestionManager\\QuestionManager.csproj": {
-              "projectPath": "C:\\Users\\CGI\\QuestionManager\\QuestionManager.csproj"
+            "c:\\Users\\CGI\\QuestionManager\\QuestionManager.csproj": {
+              "projectPath": "c:\\Users\\CGI\\QuestionManager\\QuestionManager.csproj"
             }
           }
         }
