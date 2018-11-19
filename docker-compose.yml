@@ -1,0 +1,17 @@
+services:
+  question-generator-db:
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Your_password123
+    image: microsoft/mssql-server-linux
+    ports:
+      - "1433"
+  question-generator-api:
+    build: ./QuizRTapi
+    environment:
+      SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
+    links:
+      - question-generator-db
+    ports:
+      - "8080:5000"
+version: "3"
