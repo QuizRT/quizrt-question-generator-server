@@ -17,3 +17,5 @@ C:\Users\CGI\QuizRT-Server\QuizRTapi.Tests\obj\Debug\netcoreapp2.1\QuizRTapi.Tes
 C:\Users\CGI\QuizRT-Server\QuizRTapi.Tests\obj\Debug\netcoreapp2.1\QuizRTapi.Tests.pdb
 C:\Users\CGI\QuizRT-Server\QuizRTapi.Tests\bin\Debug\netcoreapp2.1\QuestionManager.dll
 C:\Users\CGI\QuizRT-Server\QuizRTapi.Tests\bin\Debug\netcoreapp2.1\QuestionManager.pdb
+C:\Users\CGI\quizrt-question-generator-server\QuizRTapi.Tests\obj\Debug\netcoreapp2.1\QuizRTapi.Tests.dll
+C:\Users\CGI\quizrt-question-generator-server\QuizRTapi.Tests\obj\Debug\netcoreapp2.1\QuizRTapi.Tests.pdb
