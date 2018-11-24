@@ -54,83 +54,66 @@ namespace QuizRT.Models{
                 insertOneCheck = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
                 ObjectId currentItemId = insertOneCheck.Id;
                 // Console.WriteLine("-------"+currentItemId);
-                GenerateQuestionNew(qT,currentItemId);
-                return true;
+                bool check = await GenerateQuestionNew(qT,currentItemId);
+                if( check )
+                    return true;
             }
             return false;
         }
-        public bool GenerateQuestionNew(QuestionGeneration q, ObjectId currentItemId) {
+        public async Task<bool> GenerateQuestionNew(QuestionGeneration q, ObjectId currentItemId) {
             Console.WriteLine("---Inside-GenerateQuestion---");
-            Console.WriteLine(q.TopicName+" ------- "+q.CategoryName);
+            // Console.WriteLine(q.TopicName+" ------- "+q.CategoryName);
+
+            List<string> optionsList = new List<string>();
+            optionsList = GenerateOptions(q.CategoryName);
 
             string sparQL = "SELECT ?cidLabel ?authortitleLabel WHERE {?cid wdt:P31 wd:"+q.TopicId+".?cid wdt:"+q.CategoryId+" ?authortitle .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}LIMIT "+NumberOfQuestions+"";
             // string sparQL2 = $@"SELECT ?personLabel WHERE {{ ?person wdt:{q.Topic} wd:{q.Categ} . SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . } }LIMIT "+NumberOfQuestions+""; // Nishant
             Task<List<universal_object>> dataReturns = System.Threading.Tasks.Task<string>.Run(() => GetQuestionDataNew(sparQL).Result);
             List<universal_object> quesReviewList = dataReturns.Result;
-            Console.WriteLine(quesReviewList.Count+":Count");
-            // List<Questions> qL = new List<Questions>();  
+            // Console.WriteLine(quesReviewList.Count+":Count");
+            List<Questions> qL = new List<Questions>(); 
+            string replacementStrSubject = '['+getBetween(q.Text,"[","]")+']';
+            string replacementStrObject = '('+getBetween(q.Text,"(",")")+')';
             for(int i=0; i<quesReviewList.Count; i++){
+                string sampleQuestion = q.Text;
+                sampleQuestion = sampleQuestion.Replace(replacementStrObject, q.CategoryName);
+                sampleQuestion = sampleQuestion.Replace(replacementStrSubject, quesReviewList[i].mainobject);
+                // Console.WriteLine(sampleQuestion);
 
-                string replacementStrSubject = getBetween(q.Text,"[","]");
-                string replacementStrObject = getBetween(q.Text,"(",")");
-                // replacementStrSubject = '['+replacementStrSubject+']';
-                // replacementStrObject = '('+replacementStrObject+')';
-                Console.WriteLine("--["+replacementStrSubject+"]--("+replacementStrObject+")");
-                q.Text = Regex.Replace(q.Text, replacementStrObject, q.CategoryName);
-                q.Text = Regex.Replace(q.Text, replacementStrSubject, quesReviewList[i].mainobject);
-                Console.WriteLine(q.Text);
-
-                List<Questions> quesList = new List<Questions>();
-                quesList = GenerateOptions(q.CategoryName);
                 List<OtherOptions> otherOps = new List<OtherOptions>();
-                // qL.Add(ques);
+                int iteratorForOption = 0;
+                for(int j=iteratorForOption; j<3; j++){
+                    OtherOptions otherO = new OtherOptions();
+                    otherO.Option = optionsList[j];
+                    otherOps.Add(otherO);
+                    if(iteratorForOption+3 < optionsList.Count)
+                        iteratorForOption++;
+                    else
+                        iteratorForOption = 0;
+                }
+
+                Questions ques = new Questions();
+                ques.Question = sampleQuestion;
+                ques.CorrectOption = quesReviewList[i].predicate;
+                ques.OtherOptionsList = otherOps;
+
+                qL.Add(ques);
             }
-            // context.QuestionsT.AddRange(qL);
-            // context.SaveChanges();
-            return true;
+            QuestionGeneration qG = new QuestionGeneration();
+            qG.Id = currentItemId;
+            qG.Text = q.Text;
+            qG.CategoryId = q.CategoryId;
+            qG.CategoryName = q.CategoryName;
+            qG.TopicId = q.TopicId;
+            qG.TopicName = q.TopicName;
+            qG.QuestionsList = qL;
+            ReplaceOneResult updateResult = await context.QuestionGenerationCollection.
+                        ReplaceOneAsync(filter: g => g.Id == qG.Id, replacement: qG);
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
-        public List<Questions> GenerateOptions(string CategName) {
-
-            string sparQL = "SELECT ?cidLabel WHERE {?cid wdt:P31 wd:"+CategName+" .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }} LIMIT "+NumberOfQuestions+"";
-            // string sparQL2 = $@"SELECT ?personLabel WHERE {{ ?person wdt:{q.Topic} wd:{q.Categ} . SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . } }LIMIT "+NumberOfQuestions+""; // Nishant
-            Task<List<universal_object>> dataReturns = System.Threading.Tasks.Task<string>.Run(() => GetQuestionDataNew(sparQL).Result);
-            List<universal_object> quesReviewList = dataReturns.Result;
-            Console.WriteLine(quesReviewList.Count+":Count");
-            // List<Questions> qL = new List<Questions>();  
-            for(int i=0; i<quesReviewList.Count; i++){
-
-                string replacementStrSubject = getBetween(q.Text,"[","]");
-                string replacementStrObject = getBetween(q.Text,"(",")");
-                // replacementStrSubject = '['+replacementStrSubject+']';
-                // replacementStrObject = '('+replacementStrObject+')';
-                Console.WriteLine("--["+replacementStrSubject+"]--("+replacementStrObject+")");
-                q.Text = Regex.Replace(q.Text, replacementStrObject, q.CategoryName);
-                q.Text = Regex.Replace(q.Text, replacementStrSubject, quesReviewList[i].mainobject);
-                Console.WriteLine(q.Text);
-
-                List<Questions> quesList = new List<Questions>();
-                quesList = GenerateOptions();
-                List<OtherOptions> otherOps = new List<OtherOptions>();
-                // qL.Add(ques);
-            }
-            // context.QuestionsT.AddRange(qL);
-            // context.SaveChanges();
-            return true;
-        }
-
-        public static string getBetween(string strSource, string strStart, string strEnd) {
-            int Start, End;
-            if (strSource.Contains(strStart) && strSource.Contains(strEnd)) {
-                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-                End = strSource.IndexOf(strEnd, Start);
-                return strSource.Substring(Start, End - Start);
-            }
-            else {
-                return "";
-            }
-        }
-        async Task<List<Questions>> GetQuestionDataNew(string sparQL){ // Generating question related to some object other than occupation
-            List<Questions> questionGenerated = new List<Questions>();
+        async Task<List<universal_object>> GetQuestionDataNew(string sparQL){ // Generating question related to some object other than occupation
+            List<universal_object> universal_list_objects = new List<universal_object>();
             string baseUrl = "https://query.wikidata.org/sparql?query="+sparQL+"&format=json";
             //The 'using' will help to prevent memory leaks.
             //Create a new instance of HttpClient
@@ -144,7 +127,7 @@ namespace QuizRT.Models{
                 JObject json = JObject.Parse(data);
                 JArray j  = ((JArray)json["results"]["bindings"]);
                 if (data != null){
-                    Console.WriteLine(data);
+                    // Console.WriteLine(data);
                     // var GeneratedSubject = ((JArray)json["results"]["bindings"]).Select(s => s["cidLabel"]["value"].ToString());
                     // var GeneratedPredicate = ((JArray)json["results"]["bindings"]).Select(s => s["authortitleLabel"]["value"].ToString());
                     for(int i=0; i < j.Count ; i++){ 
@@ -156,9 +139,92 @@ namespace QuizRT.Models{
                         universal_list_objects.Add(s_universe);
                     }
                     
-                    return questionGenerated;
+                    return universal_list_objects;
                 }
-                return new List<Questions>();
+                return new List<universal_object>();
+            }
+        }
+        public static string getBetween(string strSource, string strStart, string strEnd) {
+            int Start, End;
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd)) {
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+            else {
+                return "";
+            }
+        }
+        public List<string> GenerateOptions(string CategName) {
+
+            Task<List<string>> dataReturns = System.Threading.Tasks.Task<string>.Run(() => GetOptionId(CategName).Result);
+            List<string> opIdList = dataReturns.Result;
+            // Console.WriteLine(opIdList.Count+":opIdListCount");
+            List<string> oL = new List<string>();  
+            for(int i=0; i<opIdList.Count; i++){
+                // Console.WriteLine(opIdList[i]);
+                string sparQL = "SELECT ?cidLabel WHERE {?cid wdt:P31 wd:"+opIdList[i]+" .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }} LIMIT "+NumberOfQuestions+"";
+                Task<List<string>> dataReturns2 = System.Threading.Tasks.Task<string>.Run(() => GetOtherOptions(sparQL).Result);
+                List<string> optionsList = dataReturns2.Result;
+                // return optionsList;
+                oL.AddRange(optionsList);
+            }
+            return oL;
+        }
+        async Task<List<string>> GetOptionId(string subject){ // Generating question related to some object other than occupation
+
+            string baseUrl = "https://www.wikidata.org/w/api.php?origin=*&action=wbsearchentities&search="+subject+"&language=en&format=json";
+            //The 'using' will help to prevent memory leaks.
+            //Create a new instance of HttpClient
+            using (HttpClient client = new HttpClient())
+            //Setting up the response...         
+            using (HttpResponseMessage res = await client.GetAsync(baseUrl))
+            using (HttpContent content = res.Content){
+                string data = await content.ReadAsStringAsync();
+                // JObject data = await content.ReadAsAsync<JObject>();
+                //Console.WriteLine(data);
+                JObject json = JObject.Parse(data);
+                JArray j  = ((JArray)json["search"]);
+                if (data != null){
+                    // Console.WriteLine(data);
+                    // var GeneratedSubject = ((JArray)json["results"]["bindings"]).Select(s => s["cidLabel"]["value"].ToString());
+                    // var GeneratedPredicate = ((JArray)json["results"]["bindings"]).Select(s => s["authortitleLabel"]["value"].ToString());
+                    List<string> opsId = new List<string>();
+                    for(int i=0; i < j.Count ; i++){
+                        if(j[i]["id"].ToString().IndexOf('Q') > -1){
+                            opsId.Add(j[i]["id"].ToString());
+                        }
+                    }
+                    return opsId;
+                }
+                return new List<string>();
+            }
+        }
+        async Task<List<string>> GetOtherOptions(string sparQL){ // Generating question related to some object other than occupation
+
+            string baseUrl = "https://query.wikidata.org/sparql?query="+sparQL+"&format=json";
+            //The 'using' will help to prevent memory leaks.
+            //Create a new instance of HttpClient
+            using (HttpClient client = new HttpClient())
+            //Setting up the response...         
+            using (HttpResponseMessage res = await client.GetAsync(baseUrl))
+            using (HttpContent content = res.Content){
+                string data = await content.ReadAsStringAsync();
+                // JObject data = await content.ReadAsAsync<JObject>();
+                // Console.WriteLine(data);
+                JObject json = JObject.Parse(data);
+                JArray j  = ((JArray)json["results"]["bindings"]);
+                if (data != null){
+                    // Console.WriteLine(data);
+                    // var GeneratedSubject = ((JArray)json["results"]["bindings"]).Select(s => s["cidLabel"]["value"].ToString());
+                    // var GeneratedPredicate = ((JArray)json["results"]["bindings"]).Select(s => s["authortitleLabel"]["value"].ToString());
+                    List<string> otherOps = new List<string>();
+                    for(int i=0; i < j.Count ; i++){
+                        otherOps.Add(j[i]["cidLabel"]["value"].ToString());
+                    }
+                    return otherOps;
+                }
+                return new List<string>();
             }
         }
         // public List<QuizRTTemplate> GetTemplate(){
