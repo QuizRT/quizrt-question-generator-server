@@ -12,8 +12,7 @@ using MongoDB.Bson;
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
         int NumberOfQuestions = 10000;
-        int optionNumber = 3;
-        // List<string> optionReviewList = new List<string>();
+        // int optionNumber = 3;
         QuizRTContext context = null;
         public QuizRTRepo(QuizRTContext _context){
             this.context = _context;
@@ -26,6 +25,9 @@ namespace QuizRT.Models{
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.TopicName, topicName);
             return await context.QuestionGenerationCollection.Find(filter).ToListAsync();
+        }
+        public List<string> GetTemplate(){
+            return context.QuestionGenerationCollection.Find(_=>true).Project(u => u.Text).ToList();
         }
         public async Task<bool> DeleteAllQuestionGenerationItems(){
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_=>true);

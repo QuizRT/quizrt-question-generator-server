@@ -29,7 +29,6 @@ namespace QuizRTapi.Tests
             Assert.NotNull(okObjectResult);
 
             var actualList = okObjectResult.Value as IEnumerable<QuestionGeneration>;
-            Console.WriteLine("--"+actualList);
 
             Assert.NotNull(actualList); // Assert
             // Console.WriteLine("actualList.Count: "+actualList.Count);
