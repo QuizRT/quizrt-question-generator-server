@@ -11,7 +11,7 @@ using MongoDB.Bson;
 
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
-        int NumberOfQuestions = 10;
+        int NumberOfQuestions = 10000;
         int optionNumber = 3;
         // List<string> optionReviewList = new List<string>();
         QuizRTContext context = null;

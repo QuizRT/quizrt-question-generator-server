@@ -6,41 +6,34 @@ using System.Collections.Generic;
 using QuizRT.Models;
 using Microsoft.AspNetCore.Mvc;
 using QuizRTapi.Controllers;
+using System.Threading.Tasks;
 
 namespace QuizRTapi.Tests
 {
     public class UnitTest1
     {
         [Fact]
-        public void GetTemplate(){
-            // DummyData DD = new DummyData();
-            // List<GingerNoteC> dummy = DD.DummyMock();  // Arrange
+        public async Task GetTemplate(){
+            DummyData DD = new DummyData();
+            IEnumerable<QuestionGeneration> dummy = DD.DummyMock();  // Arrange
             
             Mock<IQuizRTRepo> MockRepository = new Mock<IQuizRTRepo>(); // Removing Dependency
-            MockRepository.Setup(d => d.GetTemplate()).Returns(new List<QuizRTTemplate>
-                {
-                    new QuizRTTemplate{
-                        Text = "string",
-                        SparQL = "string",
-                        Categ = "string",
-                        CategName = "string",
-                        Topic = "string",
-                        TopicName = "string"
-                    }
-                }
-            );
+            MockRepository.Setup<Task<IEnumerable<QuestionGeneration>>>
+                (d => d.GetAllQuestions())
+                    .Returns(Task.FromResult<IEnumerable<QuestionGeneration>>(dummy));
             
             QuizRTController quizcontroller = new QuizRTController(MockRepository.Object); // Act
-            var actual = quizcontroller.Get("template");
+            var actual = await quizcontroller.Get();
 
             var okObjectResult = actual as OkObjectResult;
-            // Assert.NotNull(okObjectResult);
+            Assert.NotNull(okObjectResult);
 
-            var actualList = okObjectResult.Value as List<QuizRTTemplate>;
+            var actualList = okObjectResult.Value as IEnumerable<QuestionGeneration>;
+            Console.WriteLine("--"+actualList);
 
             Assert.NotNull(actualList); // Assert
-            Console.WriteLine("actualList.Count: "+actualList.Count);
-            Assert.Equal(actualList.Count , 1);
+            // Console.WriteLine("actualList.Count: "+actualList.Count);
+            // Assert.Equal(actualList , 1);
         }
     }
 }
