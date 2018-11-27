@@ -23,5 +23,5 @@ services:
       # - question-generator-db
       - question-generator-mongo
     ports:
-      - "8085:5000"
+      - "8080:5000"
 version: "3"
