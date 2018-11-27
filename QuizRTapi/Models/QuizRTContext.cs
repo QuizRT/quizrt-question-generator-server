@@ -1,8 +1,8 @@
 /// <summary>
 /// Implementing DBContext to create table, implement query
-/// string and establish foreign relations between tables
+/// string 
 /// </summary>
-using Microsoft.EntityFrameworkCore;
+// using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using QuizRT.Settings;

@@ -58,8 +58,11 @@ namespace QuizRTapi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] QuestionGeneration qG){
-            bool qPQG = await quizRTRepo.PostQuestionGeneration(qG);
+        // public async Task<IActionResult> Post([FromBody] QuestionGeneration qG){
+        public IActionResult Post([FromBody] QuestionGeneration qG){
+            Task<bool> dataReturns = System.Threading.Tasks.Task<string>.Run(() => quizRTRepo.PostQuestionGeneration(qG).Result);
+            bool qPQG = dataReturns.Result;
+            // bool qPQG = await quizRTRepo.PostQuestionGeneration(qG);
             if( qPQG ){
                 return new OkObjectResult("Success!!");
             }
