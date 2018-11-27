@@ -6,7 +6,7 @@ services:
   #   image: microsoft/mssql-server-linux
   #   ports:
   #     - "1433"
-  mongo:
+  question-generator-mongo:
     # container_name: mongo
     image: mongo
     volumes:
@@ -14,13 +14,14 @@ services:
       #- ./data:/data/db
     ports:
       - "27017:27017"
-  question-generator-api:
+  question-generator-server:
     build: ./QuizRTapi
-    # environment:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     #   SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
     links:
       # - question-generator-db
-      - mongo
+      - question-generator-mongo
     ports:
-      - "8080:5000"
+      - "8085:5000"
 version: "3"
