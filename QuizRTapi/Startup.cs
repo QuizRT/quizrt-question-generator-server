@@ -13,17 +13,20 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using QuizRT.Models;
 using QuizRT.Settings;
+using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace QuizRTapi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            HostingEnvironment = env; // For Mongo Config Env Variable
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }  // For Mongo Config Env Variable
 
         // Added for accessing appsettings variables
 
@@ -37,6 +40,9 @@ namespace QuizRTapi
                 Console.WriteLine("---------MongoDBSettings----------");
                 options.ConnectionString = Configuration.GetSection("MongoDb:ConnectionString").Value;
                 options.Database = Configuration.GetSection("MongoDb:Database").Value;
+                options.Container = Configuration.GetSection("MongoDb:Container").Value;
+                options.IsContained  = Configuration["DOTNET_RUNNING_IN_CONTAINER"] != null;
+                options.Development = HostingEnvironment.IsDevelopment();   // For Mongo Config Env Variable
             });
             services.AddScoped<IGameContext, QuizRTContext>();
 

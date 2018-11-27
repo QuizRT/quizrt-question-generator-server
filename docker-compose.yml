@@ -1,17 +1,26 @@
 services:
-  question-generator-db:
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: Your_password123
-    image: microsoft/mssql-server-linux
+  # question-generator-db:
+  #   environment:
+  #     ACCEPT_EULA: "Y"
+  #     SA_PASSWORD: Your_password123
+  #   image: microsoft/mssql-server-linux
+  #   ports:
+  #     - "1433"
+  mongo:
+    # container_name: mongo
+    image: mongo
+    volumes:
+      - ${WEBAPP_STORAGE_HOME}/site:/data/db
+      #- ./data:/data/db
     ports:
-      - "1433"
+      - "27017:27017"
   question-generator-api:
     build: ./QuizRTapi
-    environment:
-      SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
+    # environment:
+    #   SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
     links:
-      - question-generator-db
+      # - question-generator-db
+      - mongo
     ports:
       - "8080:5000"
 version: "3"

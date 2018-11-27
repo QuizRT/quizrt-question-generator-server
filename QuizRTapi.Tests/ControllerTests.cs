@@ -23,7 +23,7 @@ namespace QuizRTapi.Tests
                     .Returns(Task.FromResult<IEnumerable<QuestionGeneration>>(dummy));
             
             QuizRTController quizcontroller = new QuizRTController(MockRepository.Object); // Act
-            var actual = await quizcontroller.Get();
+            var actual = await quizcontroller.GetAllQuestions();
 
             var okObjectResult = actual as OkObjectResult;
             Assert.NotNull(okObjectResult);
