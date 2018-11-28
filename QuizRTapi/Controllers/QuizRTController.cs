@@ -16,26 +16,33 @@ namespace QuizRTapi.Controllers
         public QuizRTController(IQuizRTRepo _quizRTRepo){
             this.quizRTRepo = _quizRTRepo;
         }
-        [HttpGet("question")]
+        [HttpGet("questions")]
         public async Task<IActionResult> GetAllQuestions() {
             var qGAQ = await quizRTRepo.GetAllQuestions();
             if(qGAQ.Count() > 0)
                 return new OkObjectResult(qGAQ);
             return NotFound("Database Empty!!");
         }
-        [HttpGet("question/{topicname}")]
+        [HttpGet("questions/{topicname}")]
         public async Task<IActionResult> GetQuestionsByTopic(string topicname){
             var qGQBT = await quizRTRepo.GetQuestionsByTopic(topicname);
             if(qGQBT.Count() > 0)
                 return new OkObjectResult(qGQBT);
             return NotFound("Questions For Topic "+topicname+" Not Found");
         }
-        [HttpGet("template")]
+        [HttpGet("topics")]
+        public IActionResult GetAllTopics(){
+            var lT = quizRTRepo.GetAllTopics();
+            if( lT.Count() > 0)
+                return new OkObjectResult(lT);
+            return NotFound("No Topics!");
+        }
+        [HttpGet("templates")]
         public IActionResult GetTemplate(){
             var lT = quizRTRepo.GetTemplate();
             if( lT.Count() > 0 )
                 return new OkObjectResult(lT);
-            return NotFound("NO Templates!");
+            return NotFound("No Templates!");
         }
         // GET api/quizrt
         // [HttpGet("{variable}")]

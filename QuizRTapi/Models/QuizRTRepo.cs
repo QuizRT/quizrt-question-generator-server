@@ -26,6 +26,15 @@ namespace QuizRT.Models{
                                                             .Filter.Eq(m => m.TopicName, topicName);
             return await context.QuestionGenerationCollection.Find(filter).ToListAsync();
         }
+        public List<string> GetAllTopics(){
+            //var filter = new BsonDocument();
+            //return context.QuestionGenerationCollection.Find(_=>true).Project(u => u.TopicName).Distinct("TopicName",filter).ToList();
+            BsonDocument filter = new BsonDocument();
+            List<string> distinct = context.QuestionGenerationCollection
+                                    .Distinct<string>("TopicName", filter).ToList();
+            return distinct;
+            // return context.QuestionGenerationCollection.Distinct("TopicName");
+        }
         public List<string> GetTemplate(){
             return context.QuestionGenerationCollection.Find(_=>true).Project(u => u.Text).ToList();
         }
@@ -146,6 +155,7 @@ namespace QuizRT.Models{
                 return new List<universal_object>();
             }
         }
+
         public static string getBetween(string strSource, string strStart, string strEnd) {
             int Start, End;
             if (strSource.Contains(strStart) && strSource.Contains(strEnd)) {

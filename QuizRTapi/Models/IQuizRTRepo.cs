@@ -14,6 +14,7 @@ namespace QuizRT.Models{
         Task<bool> DeleteQuestionGenerationItemsByTopic(string topicName);
         Task<bool> PostQuestionGeneration(QuestionGeneration qG);
         List<string> GetTemplate();
+        List<string> GetAllTopics();
         // List<QuizRTTemplate> GetTemplate();
         // List<Questions> GetQuestion();
         // List<Options> GetOption();
