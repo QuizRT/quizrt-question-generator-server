@@ -19,7 +19,7 @@ namespace QuizRT.Models{
         }
 
         public async Task<IEnumerable<QuestionGeneration>> GetAllQuestions() {
-            return await context.QuestionGenerationCollection.Find(_ => true).ToListAsync();
+            return await context.QuestionGenerationCollection.Find(_  => true).ToListAsync();
         }
         public async Task<IEnumerable<QuestionGeneration>> GetQuestionsByTopic(string topicName) {
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
@@ -32,10 +32,10 @@ namespace QuizRT.Models{
             return context.QuestionGenerationCollection.Distinct<string>("TopicName", filter).ToList();
         }
         public List<string> GetTemplate() {
-            return context.QuestionGenerationCollection.Find(_=>true).Project(u => u.Text).ToList();
+            return context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text).ToList();
         }
         public async Task<bool> DeleteAllQuestionGenerationItems() {
-            DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_=>true);
+            DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_ => true);
             if ( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
                 return true;
