@@ -31,15 +31,15 @@ namespace QuizRTapi.Controllers
             return NotFound();
         }
         [HttpGet("topics")]
-        public IActionResult GetAllTopics() {
-            var listOfTopics = quizRTRepo.GetAllTopics();
+        public async Task<IActionResult> GetAllTopics() {
+            var listOfTopics = await quizRTRepo.GetAllTopics();
             if( listOfTopics.Count() > 0)
                 return new OkObjectResult(listOfTopics);
             return NotFound();
         }
         [HttpGet("templates")]
-        public IActionResult GetTemplates(){
-            var listOfTemplates = quizRTRepo.GetTemplate();
+        public async Task<IActionResult> GetTemplates(){
+            var listOfTemplates = await quizRTRepo.GetTemplate();
             if( listOfTemplates.Count() > 0 )
                 return new OkObjectResult(listOfTemplates);
             return NotFound();

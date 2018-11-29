@@ -27,13 +27,15 @@ namespace QuizRT.Models{
             var questionCursor = await context.QuestionGenerationCollection.FindAsync(filter);
             return await questionCursor.ToListAsync();
         }
-        public List<string> GetAllTopics() {
+        public async Task<List<string>> GetAllTopics() {
             // BsonDocument filter = new BsonDocument();
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>.Filter.Empty;
-            return context.QuestionGenerationCollection.Distinct<string>("TopicName", filter).ToList();
+            var topicCursor = await context.QuestionGenerationCollection.DistinctAsync<string>("TopicName", filter);
+            return await topicCursor.ToListAsync();
         }
-        public List<string> GetTemplate() {
-            return context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text).ToList();
+        public async Task<List<string>> GetTemplate() {
+            var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
+            return await templateCursor.ToListAsync();
         }
         public async Task<bool> DeleteAllQuestionGenerationItems() {
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_ => true);
