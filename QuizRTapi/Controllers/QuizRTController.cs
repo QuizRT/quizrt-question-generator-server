@@ -38,7 +38,7 @@ namespace QuizRTapi.Controllers
             return NotFound();
         }
         [HttpGet("templates")]
-        public IActionResult GetTemplate(){
+        public IActionResult GetTemplates(){
             var lT = quizRTRepo.GetTemplate();
             if( lT.Count() > 0 )
                 return new OkObjectResult(lT);
