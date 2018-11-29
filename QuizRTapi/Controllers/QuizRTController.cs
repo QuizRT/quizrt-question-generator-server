@@ -19,14 +19,14 @@ namespace QuizRTapi.Controllers
         [HttpGet("questions")]
         public async Task<IActionResult> GetAllQuestions() {
             var allQuestions = await quizRTRepo.GetAllQuestions();
-            if(allQuestions.Count() > 0)
+            if( allQuestions.Count() > 0 )
                 return new OkObjectResult(allQuestions);
             return NotFound();
         }
         [HttpGet("questions/{topicname}")]
         public async Task<IActionResult> GetQuestionsByTopic(string topicname) {
             var allQuestionsByTopic = await quizRTRepo.GetQuestionsByTopic(topicname);
-            if(allQuestionsByTopic.Count() > 0)
+            if( allQuestionsByTopic.Count() > 0 )
                 return new OkObjectResult(allQuestionsByTopic);
             return NotFound();
         }
