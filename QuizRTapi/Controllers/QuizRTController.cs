@@ -48,7 +48,7 @@ namespace QuizRTapi.Controllers
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> PostQuestionsAndOptoins([FromBody] QuestionGeneration qG){
-            bool statusOfQuestionPost = await quizRTRepo.PostQuestionGeneration(qG);
+            bool statusOfQuestionPost = await quizRTRepo.GenerateQuestionsAndOptions(qG);
             if( statusOfQuestionPost )
                 return new NoContentResult();
             return BadRequest();
@@ -67,14 +67,14 @@ namespace QuizRTapi.Controllers
         // DELETE api/values/
         [HttpDelete]
         public async Task<IActionResult> DeleteAllQuestions() {
-            bool deleteStatus = await quizRTRepo.DeleteAllQuestionGenerationItems();
+            bool deleteStatus = await quizRTRepo.DeleteAllQuestions();
             if( deleteStatus )
                 return new NoContentResult();
             return NotFound();
         }
         [HttpDelete("{topicname}")]
         public async Task<IActionResult> DeleteQuestionsByTopicName(string topicname) {
-            bool deleteStatus = await quizRTRepo.DeleteQuestionGenerationItemsByTopic(topicname);
+            bool deleteStatus = await quizRTRepo.DeleteQuestionsByTopic(topicname);
             if( deleteStatus )
                 return new NoContentResult();
             return NotFound();
