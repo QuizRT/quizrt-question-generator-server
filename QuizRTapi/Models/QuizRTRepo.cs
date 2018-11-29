@@ -28,7 +28,8 @@ namespace QuizRT.Models{
             return await questionCursor.ToListAsync();
         }
         public List<string> GetAllTopics() {
-            BsonDocument filter = new BsonDocument();
+            // BsonDocument filter = new BsonDocument();
+            FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>.Filter.Empty;
             return context.QuestionGenerationCollection.Distinct<string>("TopicName", filter).ToList();
         }
         public List<string> GetTemplate() {

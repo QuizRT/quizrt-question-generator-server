@@ -7,6 +7,8 @@ namespace QuizRT.Models{
     public class QuestionGeneration {
         [BsonId]
         public ObjectId Id { get; set; }
+        // [BsonRepresentation(BsonType.ObjectId)]
+        // public string Id { get; set; }
         public string Text { get; set; }
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
