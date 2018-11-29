@@ -18,41 +18,38 @@ namespace QuizRTapi.Controllers
         }
         [HttpGet("questions")]
         public async Task<IActionResult> GetAllQuestions() {
-            var qGAQ = await quizRTRepo.GetAllQuestions();
-            if(qGAQ.Count() > 0)
-                return new OkObjectResult(qGAQ);
+            var allQuestions = await quizRTRepo.GetAllQuestions();
+            if(allQuestions.Count() > 0)
+                return new OkObjectResult(allQuestions);
             return NotFound();
         }
         [HttpGet("questions/{topicname}")]
         public async Task<IActionResult> GetQuestionsByTopic(string topicname) {
-            var qGQBT = await quizRTRepo.GetQuestionsByTopic(topicname);
-            if(qGQBT.Count() > 0)
-                return new OkObjectResult(qGQBT);
+            var allQuestionsByTopic = await quizRTRepo.GetQuestionsByTopic(topicname);
+            if(allQuestionsByTopic.Count() > 0)
+                return new OkObjectResult(allQuestionsByTopic);
             return NotFound();
         }
         [HttpGet("topics")]
         public IActionResult GetAllTopics() {
-            var lT = quizRTRepo.GetAllTopics();
-            if( lT.Count() > 0)
-                return new OkObjectResult(lT);
+            var listOfTopics = quizRTRepo.GetAllTopics();
+            if( listOfTopics.Count() > 0)
+                return new OkObjectResult(listOfTopics);
             return NotFound();
         }
         [HttpGet("templates")]
         public IActionResult GetTemplates(){
-            var lT = quizRTRepo.GetTemplate();
-            if( lT.Count() > 0 )
-                return new OkObjectResult(lT);
+            var listOfTemplates = quizRTRepo.GetTemplate();
+            if( listOfTemplates.Count() > 0 )
+                return new OkObjectResult(listOfTemplates);
             return NotFound();
         }
 
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> PostQuestionsAndOptoins([FromBody] QuestionGeneration qG){
-        // public IActionResult Post([FromBody] QuestionGeneration qG){
-            // Task<bool> dataReturns = System.Threading.Tasks.Task<string>.Run(() => quizRTRepo.PostQuestionGeneration(qG).Result);
-            // bool qPQG = dataReturns.Result;
-            bool qPQG = await quizRTRepo.PostQuestionGeneration(qG);
-            if( qPQG )
+            bool statusOfQuestionPost = await quizRTRepo.PostQuestionGeneration(qG);
+            if( statusOfQuestionPost )
                 return new NoContentResult();
             return BadRequest();
         }
