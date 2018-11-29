@@ -10,10 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-// using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using QuizRT.Models;
 using QuizRT.Settings;
 using Microsoft.AspNetCore.Hosting.Internal;
+using Consul;
 
 namespace QuizRTapi
 {
@@ -28,13 +29,19 @@ namespace QuizRTapi
         public IConfiguration Configuration { get; }
         public IHostingEnvironment HostingEnvironment { get; }  // For Mongo Config Env Variable
 
-        // Added for accessing appsettings variables
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Config For Service Discovery - Consul
+            // services.Configure<ConsulConfig>(Configuration.GetSection("consulConfig"));
+            // services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig => {
+            //     var address = Configuration["consulConfig:address"];
+            //     consulConfig.Address = new Uri(address);
+            // }));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<QuizRTContext>();
+
             // For MongoDb Connection String
             services.Configure<MongoDBSettings>( options => {
                 Console.WriteLine("---------MongoDBSettings----------");
@@ -66,12 +73,14 @@ namespace QuizRTapi
 
             // services.AddDbContext<QuizRTContext>(); // Before Docker
             // services.AddScoped<IQuizRTRepo,QuizRTRepo>();
+            
             services.AddScoped<IQuizRTRepo,QuizRTRepo>();
             services.AddCors(); // adding CORS service for use in  Configure fn *hellokuldeep
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+                                // ILoggerFactory loggerFactory, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -89,8 +98,11 @@ namespace QuizRTapi
                         .AllowAnyHeader()
             ); //for CORS *hellokuldeep
 
+            // loggerFactory.AddConsole();
+
             // app.UseHttpsRedirection();
             app.UseMvc();
+            // app.RegisterWithConsul(lifetime);
 
         }
     }

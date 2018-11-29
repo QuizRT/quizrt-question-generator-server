@@ -23,6 +23,28 @@
           "lib/netstandard1.5/Castle.Core.dll": {}
         }
       },
+      "Consul/0.7.2.6": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.2",
+          "System.Collections": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Net.Http": "4.3.0",
+          "System.Net.Http.WinHttpHandler": "4.0.0",
+          "System.Runtime": "4.3.0",
+          "System.Security.Cryptography.X509Certificates": "4.3.0",
+          "System.Text.RegularExpressions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Thread": "4.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Consul.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Consul.dll": {}
+        }
+      },
       "DnsClient/1.0.7": {
         "type": "package",
         "dependencies": {
@@ -4653,6 +4675,43 @@
           }
         }
       },
+      "System.Net.Http.WinHttpHandler/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.Win32.Primitives": "4.0.1",
+          "System.Collections": "4.0.11",
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Diagnostics.DiagnosticSource": "4.0.0",
+          "System.Globalization": "4.0.11",
+          "System.IO": "4.1.0",
+          "System.IO.Compression": "4.1.0",
+          "System.Net.Http": "4.1.0",
+          "System.Net.Primitives": "4.0.11",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Runtime.Handles": "4.0.1",
+          "System.Runtime.InteropServices": "4.1.0",
+          "System.Security.Cryptography.X509Certificates": "4.1.0",
+          "System.Text.Encoding": "4.0.11",
+          "System.Threading": "4.0.11",
+          "System.Threading.Tasks": "4.0.11"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Net.Http.WinHttpHandler.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Net.Http.WinHttpHandler.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Net.Http.WinHttpHandler.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "System.Net.NameResolution/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -5992,6 +6051,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
+          "Consul": "0.7.2.6",
           "Microsoft.AspNetCore.Cors": "2.1.1",
           "Microsoft.EntityFrameworkCore.Design": "2.1.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.3",
@@ -6031,6 +6091,18 @@
         "lib/netstandard1.5/Castle.Core.dll",
         "lib/netstandard1.5/Castle.Core.xml",
         "readme.txt"
+      ]
+    },
+    "Consul/0.7.2.6": {
+      "sha512": "P1fWEDOVsfksYvjzjObwd9KEqAOoEFdqTfEemY+XKojEgL+H0OALw9SBBYTIjqi1GKv0Kql8fb2/ZUe/E8Dk5w==",
+      "type": "package",
+      "path": "consul/0.7.2.6",
+      "files": [
+        ".signature.p7s",
+        "consul.0.7.2.6.nupkg.sha512",
+        "consul.nuspec",
+        "lib/net45/Consul.dll",
+        "lib/netstandard1.3/Consul.dll"
       ]
     },
     "DnsClient/1.0.7": {
@@ -11968,6 +12040,34 @@
         "system.net.http.nuspec"
       ]
     },
+    "System.Net.Http.WinHttpHandler/4.0.0": {
+      "sha512": "HjQb57X5U18C86jM/stAbNZwU0I2C/g90+nL52BBnpXpH5OM4Yza/9MXE0EVxqHDgl/opN7cpira+GW3uDt9PQ==",
+      "type": "package",
+      "path": "system.net.http.winhttphandler/4.0.0",
+      "files": [
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/net46/System.Net.Http.WinHttpHandler.dll",
+        "ref/netstandard1.3/System.Net.Http.WinHttpHandler.dll",
+        "ref/netstandard1.3/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/de/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/es/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/fr/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/it/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/ja/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/ko/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/ru/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/zh-hans/System.Net.Http.WinHttpHandler.xml",
+        "ref/netstandard1.3/zh-hant/System.Net.Http.WinHttpHandler.xml",
+        "runtimes/unix/lib/netstandard1.3/System.Net.Http.WinHttpHandler.dll",
+        "runtimes/win/lib/net46/System.Net.Http.WinHttpHandler.dll",
+        "runtimes/win/lib/netcore50/_._",
+        "runtimes/win/lib/netstandard1.3/System.Net.Http.WinHttpHandler.dll",
+        "system.net.http.winhttphandler.4.0.0.nupkg.sha512",
+        "system.net.http.winhttphandler.nuspec"
+      ]
+    },
     "System.Net.NameResolution/4.3.0": {
       "sha512": "AFYl08R7MrsrEjqpQWTZWBadqXyTzNDaWpMqyxhb0d6sGhV6xMDKueuBXlLL30gz+DIRY6MpdgnHWlCh5wmq9w==",
       "type": "package",
@@ -15310,11 +15410,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi.Tests\\QuizRTapi.Tests.csproj",
+      "projectUniqueName": "c:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi.Tests\\QuizRTapi.Tests.csproj",
       "projectName": "QuizRTapi.Tests",
-      "projectPath": "C:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi.Tests\\QuizRTapi.Tests.csproj",
+      "projectPath": "c:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi.Tests\\QuizRTapi.Tests.csproj",
       "packagesPath": "C:\\Users\\CGI\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi.Tests\\obj\\",
+      "outputPath": "c:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15331,8 +15431,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi\\QuizRTapi.csproj": {
-              "projectPath": "C:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi\\QuizRTapi.csproj"
+            "c:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi\\QuizRTapi.csproj": {
+              "projectPath": "c:\\Users\\CGI\\quizrt-question-generator-server\\QuizRTapi\\QuizRTapi.csproj"
             }
           }
         }

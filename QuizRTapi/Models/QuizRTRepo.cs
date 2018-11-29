@@ -13,32 +13,28 @@ namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
         int NumberOfQuestions = 1000;
         // int optionNumber = 3;
-        QuizRTContext context = null;
-        public QuizRTRepo(QuizRTContext _context){
+        QuizRTContext context;
+        public QuizRTRepo(QuizRTContext _context) {
             this.context = _context;
         }
 
         public async Task<IEnumerable<QuestionGeneration>> GetAllQuestions() {
-            return await context.QuestionGenerationCollection.Find(_=>true).ToListAsync();
+            return await context.QuestionGenerationCollection.Find(_ => true).ToListAsync();
         }
-        public async Task<IEnumerable<QuestionGeneration>> GetQuestionsByTopic(string topicName){
+        public async Task<IEnumerable<QuestionGeneration>> GetQuestionsByTopic(string topicName) {
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.TopicName, topicName);
-            return await context.QuestionGenerationCollection.Find(filter).ToListAsync();
+            var questionCursor = await context.QuestionGenerationCollection.FindAsync(filter);
+            return await questionCursor.ToListAsync();
         }
-        public List<string> GetAllTopics(){
-            //var filter = new BsonDocument();
-            //return context.QuestionGenerationCollection.Find(_=>true).Project(u => u.TopicName).Distinct("TopicName",filter).ToList();
+        public List<string> GetAllTopics() {
             BsonDocument filter = new BsonDocument();
-            List<string> distinct = context.QuestionGenerationCollection
-                                    .Distinct<string>("TopicName", filter).ToList();
-            return distinct;
-            // return context.QuestionGenerationCollection.Distinct("TopicName");
+            return context.QuestionGenerationCollection.Distinct<string>("TopicName", filter).ToList();
         }
-        public List<string> GetTemplate(){
+        public List<string> GetTemplate() {
             return context.QuestionGenerationCollection.Find(_=>true).Project(u => u.Text).ToList();
         }
-        public async Task<bool> DeleteAllQuestionGenerationItems(){
+        public async Task<bool> DeleteAllQuestionGenerationItems() {
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_=>true);
             if ( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
@@ -46,7 +42,7 @@ namespace QuizRT.Models{
             }
             return false;
         }
-        public async Task<bool> DeleteQuestionGenerationItemsByTopic(string topicNmae){
+        public async Task<bool> DeleteQuestionGenerationItemsByTopic(string topicNmae) {
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.TopicName, topicNmae);
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(filter);
@@ -56,7 +52,7 @@ namespace QuizRT.Models{
             }
             return false;
         }
-        public async Task<bool> PostQuestionGeneration(QuestionGeneration qT){
+        public async Task<bool> PostQuestionGeneration(QuestionGeneration qT) {
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.Text, qT.Text);
             var insertOneCheck = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
@@ -64,7 +60,6 @@ namespace QuizRT.Models{
                 await context.QuestionGenerationCollection.InsertOneAsync(qT);
                 insertOneCheck = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
                 ObjectId currentItemId = insertOneCheck.Id;
-                // Console.WriteLine("-------"+currentItemId);
                 bool check = await GenerateQuestionNew(qT,currentItemId);
                 if( check )
                     return true;
@@ -72,11 +67,9 @@ namespace QuizRT.Models{
             return false;
         }
         public async Task<bool> GenerateQuestionNew(QuestionGeneration q, ObjectId currentItemId) {
-            Console.WriteLine("---Inside-GenerateQuestion---");
-            // Console.WriteLine(q.TopicName+" ------- "+q.CategoryName);
 
-            List<string> optionsList = new List<string>();
-            optionsList = GenerateOptions(q.CategoryName);
+            // List<string> optionsList = new List<string>();
+            var optionsList = GenerateOptions(q.CategoryName);
 
             string sparQL = "SELECT ?cidLabel ?authortitleLabel WHERE {?cid wdt:P31 wd:"+q.TopicId+".?cid wdt:"+q.CategoryId+" ?authortitle .SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . }}LIMIT "+NumberOfQuestions+"";
             // string sparQL2 = $@"SELECT ?personLabel WHERE {{ ?person wdt:{q.Topic} wd:{q.Categ} . SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . } }LIMIT "+NumberOfQuestions+""; // Nishant
@@ -94,7 +87,7 @@ namespace QuizRT.Models{
 
                 List<OtherOptions> otherOps = new List<OtherOptions>();
                 int iteratorForOption = 0;
-                for(int j=iteratorForOption; j<3; j++){
+                for(int j=iteratorForOption; j<3; j++) {
                     OtherOptions otherO = new OtherOptions();
                     otherO.Option = optionsList[j];
                     otherOps.Add(otherO);
@@ -123,7 +116,7 @@ namespace QuizRT.Models{
                         ReplaceOneAsync(filter: g => g.Id == qG.Id, replacement: qG);
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
-        async Task<List<universal_object>> GetQuestionDataNew(string sparQL){ // Generating question related to some object other than occupation
+        async Task<List<universal_object>> GetQuestionDataNew(string sparQL) { // Generating question related to some object other than occupation
             List<universal_object> universal_list_objects = new List<universal_object>();
             string baseUrl = "https://query.wikidata.org/sparql?query="+sparQL+"&format=json";
             //The 'using' will help to prevent memory leaks.
@@ -183,7 +176,7 @@ namespace QuizRT.Models{
             }
             return oL;
         }
-        async Task<List<string>> GetOptionId(string subject){ // Generating question related to some object other than occupation
+        async Task<List<string>> GetOptionId(string subject) { // Generating question related to some object other than occupation
 
             string baseUrl = "https://www.wikidata.org/w/api.php?origin=*&action=wbsearchentities&search="+subject+"&language=en&format=json";
             //The 'using' will help to prevent memory leaks.
@@ -212,7 +205,7 @@ namespace QuizRT.Models{
                 return new List<string>();
             }
         }
-        async Task<List<string>> GetOtherOptions(string sparQL){ // Generating question related to some object other than occupation
+        async Task<List<string>> GetOtherOptions(string sparQL) { // Generating question related to some object other than occupation
 
             string baseUrl = "https://query.wikidata.org/sparql?query="+sparQL+"&format=json";
             //The 'using' will help to prevent memory leaks.

@@ -1,8 +1,7 @@
 /// <summary>
-/// Implementing DBContext to create table, implement query
-/// string 
+/// Implementing DBContext to create table, implement query string 
 /// </summary>
-// using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using QuizRT.Settings;
@@ -10,8 +9,7 @@ using QuizRT.Settings;
 namespace QuizRT.Models{
     public class QuizRTContext : IGameContext {
         private readonly IMongoDatabase _db;
-        public QuizRTContext(IOptions<MongoDBSettings> options)
-        {
+        public QuizRTContext(IOptions<MongoDBSettings> options) {
             var client = new MongoClient(options.Value.ConnectionString);
             _db = client.GetDatabase(options.Value.Database);
         }

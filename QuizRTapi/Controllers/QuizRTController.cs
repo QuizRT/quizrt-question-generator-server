@@ -13,7 +13,7 @@ namespace QuizRTapi.Controllers
     public class QuizRTController : ControllerBase
     {
         IQuizRTRepo quizRTRepo;
-        public QuizRTController(IQuizRTRepo _quizRTRepo){
+        public QuizRTController(IQuizRTRepo _quizRTRepo) {
             this.quizRTRepo = _quizRTRepo;
         }
         [HttpGet("questions")]
@@ -21,86 +21,66 @@ namespace QuizRTapi.Controllers
             var qGAQ = await quizRTRepo.GetAllQuestions();
             if(qGAQ.Count() > 0)
                 return new OkObjectResult(qGAQ);
-            return NotFound("Database Empty!!");
+            return NotFound();
         }
         [HttpGet("questions/{topicname}")]
-        public async Task<IActionResult> GetQuestionsByTopic(string topicname){
+        public async Task<IActionResult> GetQuestionsByTopic(string topicname) {
             var qGQBT = await quizRTRepo.GetQuestionsByTopic(topicname);
             if(qGQBT.Count() > 0)
                 return new OkObjectResult(qGQBT);
-            return NotFound("Questions For Topic "+topicname+" Not Found");
+            return NotFound();
         }
         [HttpGet("topics")]
-        public IActionResult GetAllTopics(){
+        public IActionResult GetAllTopics() {
             var lT = quizRTRepo.GetAllTopics();
             if( lT.Count() > 0)
                 return new OkObjectResult(lT);
-            return NotFound("No Topics!");
+            return NotFound();
         }
         [HttpGet("templates")]
         public IActionResult GetTemplate(){
             var lT = quizRTRepo.GetTemplate();
             if( lT.Count() > 0 )
                 return new OkObjectResult(lT);
-            return NotFound("No Templates!");
+            return NotFound();
         }
-        // GET api/quizrt
-        // [HttpGet("{variable}")]
-        // public IActionResult Get(string variable){
-        //     if ( variable == "template" ) {
-        //         List<QuizRTTemplate> Lqt = quizRTRepo.GetTemplate();
-        //         if( Lqt.Count > 0 )
-        //             return Ok(Lqt);
-        //     } else if ( variable == "question" ) {
-        //         List<Questions> Lq = quizRTRepo.GetQuestion();
-        //         if( Lq.Count > 0 )
-        //             return Ok(Lq);
-        //     } else if ( variable == "option" ) {
-        //         List<Options> Lo = quizRTRepo.GetOption();
-        //         if( Lo.Count > 0 )
-        //             return Ok(Lo);
-        //     }
-        //     return NotFound("Empty Database {TABLE: "+variable+"}");
-        // }
 
         // POST api/values
         [HttpPost]
-        // public async Task<IActionResult> Post([FromBody] QuestionGeneration qG){
-        public IActionResult Post([FromBody] QuestionGeneration qG){
-            Task<bool> dataReturns = System.Threading.Tasks.Task<string>.Run(() => quizRTRepo.PostQuestionGeneration(qG).Result);
-            bool qPQG = dataReturns.Result;
-            // bool qPQG = await quizRTRepo.PostQuestionGeneration(qG);
-            if( qPQG ){
-                return new OkObjectResult("Success!!");
-            }
-            return BadRequest("Database Error!! {POST}");
+        public async Task<IActionResult> PostQuestionsAndOptoins([FromBody] QuestionGeneration qG){
+        // public IActionResult Post([FromBody] QuestionGeneration qG){
+            // Task<bool> dataReturns = System.Threading.Tasks.Task<string>.Run(() => quizRTRepo.PostQuestionGeneration(qG).Result);
+            // bool qPQG = dataReturns.Result;
+            bool qPQG = await quizRTRepo.PostQuestionGeneration(qG);
+            if( qPQG )
+                return new NoContentResult();
+            return BadRequest();
         }
         [HttpPost("{id}")]
-        public IActionResult Post(int id, [FromBody] QuestionGeneration q){
-        //    List<Questions> all_data =  quizRTRepo.GetQuestionOnlyWithoutInsertion(q);
-           return Ok("all_data");
+        public IActionResult Post(int id){
+           return BadRequest();
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] QuestionGeneration q){
+        public IActionResult Put(int id, [FromBody] QuestionGeneration q){
+            return BadRequest();
         }
 
-        // DELETE api/values/5
-        // [HttpDelete("{id}")]
+        // DELETE api/values/
         [HttpDelete]
-        public async Task<IActionResult> Delete(){
+        public async Task<IActionResult> DeleteAllQuestions() {
             bool deleteStatus = await quizRTRepo.DeleteAllQuestionGenerationItems();
             if( deleteStatus )
-                return new OkObjectResult("Deletion Successful");
-            return BadRequest("Something Went Wrong!! No Items");
+                return new NoContentResult();
+            return NotFound();
         }
         [HttpDelete("{topicname}")]
-        public async Task<IActionResult> Delete(string topicname){
+        public async Task<IActionResult> DeleteQuestionsByTopicName(string topicname) {
             bool deleteStatus = await quizRTRepo.DeleteQuestionGenerationItemsByTopic(topicname);
             if( deleteStatus )
-                return new OkObjectResult("All Enteries Of Topic "+topicname+" Deleted Succesfully.");
-            return BadRequest("Something Went Wrong!! @["+topicname+" Items Not Present.]");
+                return new NoContentResult();
+            return NotFound();
         }
     }
 }
