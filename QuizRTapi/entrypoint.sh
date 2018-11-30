@@ -8,5 +8,5 @@ run_cmd="dotnet run --server.urls http://*:80"
 # sleep 1
 # done
 
->&2 echo "SQL Server is up - executing command"
+>&2 echo "Executing command"
 exec $run_cmd
