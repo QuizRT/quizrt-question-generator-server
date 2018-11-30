@@ -57,6 +57,11 @@ namespace QuizRTapi
                 options.Container = Configuration.GetSection("MongoDb:Container").Value;
                 options.IsContained  = Configuration["DOTNET_RUNNING_IN_CONTAINER"] != null;
                 options.Development = HostingEnvironment.IsDevelopment();   // For Mongo Config Env Variable
+                Console.WriteLine("---------"+options.ConnectionString+"---------");
+                Console.WriteLine("---------"+options.Database+"---------");
+                Console.WriteLine("---------"+options.Container+"---------");
+                Console.WriteLine("---------"+options.IsContained+"---------");
+                Console.WriteLine("---------"+options.Development+"---------");
             });
             services.AddScoped<IGameContext, QuizRTContext>();
 
