@@ -15,6 +15,7 @@ using QuizRT.Models;
 using QuizRT.Settings;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Consul;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace QuizRTapi
 {
@@ -32,15 +33,21 @@ namespace QuizRTapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<QuizRTContext>();
+            
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
             // Config For Service Discovery - Consul
             // services.Configure<ConsulConfig>(Configuration.GetSection("consulConfig"));
             // services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig => {
             //     var address = Configuration["consulConfig:address"];
             //     consulConfig.Address = new Uri(address);
             // }));
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddScoped<QuizRTContext>();
 
             // For MongoDb Connection String
             services.Configure<MongoDBSettings>( options => {
