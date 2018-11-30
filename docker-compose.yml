@@ -19,7 +19,7 @@ services:
     labels:
       SERVICE_7001_NAME: QuestionGenerator
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      # - ASPNETCORE_ENVIRONMENT=Development
     #   SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
     links:
       # - question-generator-db
