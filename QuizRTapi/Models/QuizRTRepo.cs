@@ -246,7 +246,7 @@ namespace QuizRT.Models{
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "Topics",
+                channel.QueueDeclare(queue: "Topic",
                                     durable: false,
                                     exclusive: false,
                                     autoDelete: false,
@@ -259,7 +259,7 @@ namespace QuizRT.Models{
                 var body = Encoding.UTF8.GetBytes(newTopicAdded);
 
                 channel.BasicPublish(exchange: "",
-                                    routingKey: "Topics",
+                                    routingKey: "Topic",
                                     basicProperties: null,
                                     body: body
                 );
