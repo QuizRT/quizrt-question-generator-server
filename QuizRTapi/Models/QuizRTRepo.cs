@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using RabbitMQ.Client;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
@@ -59,12 +62,23 @@ namespace QuizRT.Models{
             var checkForTemplate = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
             if( checkForTemplate == null )
             {
+                List<string> getPresentTopics = await GetAllTopics();
                 await context.QuestionGenerationCollection.InsertOneAsync(qT);
                 var insertedTemplate = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
                 ObjectId currentTemplateId = insertedTemplate.Id;
                 bool check = await InsertQuestionsAndOptions(qT,currentTemplateId);
                 if(check)
+                {   Console.WriteLine("-------Inserted Mongo ------- {0} --------",qT.TopicName);
+                    getPresentTopics.ForEach(i => Console.Write("-- {0}\t", i));
+                    Console.WriteLine("------ Val - {0} ------",getPresentTopics.Contains(qT.TopicName, StringComparer.OrdinalIgnoreCase));
+                    // if (!getPresentTopics.Any(str => str.Contains(qT.TopicName)))
+                    if (!getPresentTopics.Contains(qT.TopicName, StringComparer.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("------{0} Publishing------",qT.TopicName);
+                        PublishTopic(qT.TopicName);
+                    }
                     return true;
+                }
             }
             return false;
         }
@@ -224,6 +238,35 @@ namespace QuizRT.Models{
                 }
                 return otherOps;
             }
+        }
+        public void PublishTopic(string newTopicAdded)
+        {
+            Console.WriteLine("------Going Rabbit------");
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "Topics",
+                                    durable: false,
+                                    exclusive: false,
+                                    autoDelete: false,
+                                    arguments: null
+                );
+
+                // String jsonified = JsonConvert.SerializeObject(new List<string>());
+                // byte[] customerBuffer = Encoding.UTF8.GetBytes(jsonified);
+
+                var body = Encoding.UTF8.GetBytes(newTopicAdded);
+
+                channel.BasicPublish(exchange: "",
+                                    routingKey: "Topics",
+                                    basicProperties: null,
+                                    body: body
+                );
+                Console.WriteLine("-----{0} Topic Queued-----", newTopicAdded);
+            }
+            // Console.WriteLine(" Press [enter] to exit.");
+            // Console.ReadLine();
         }
 
 // ---------------------------------
