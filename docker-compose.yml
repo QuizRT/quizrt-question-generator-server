@@ -1,45 +1,25 @@
+version: "3"
 services:
-  # question-generator-db:
-  #   environment:
-  #     ACCEPT_EULA: "Y"
-  #     SA_PASSWORD: Your_password123
-  #   image: microsoft/mssql-server-linux
-  #   ports:
-  #     - "1433"
   question-generator-mongo:
-    # container_name: mongo
     image: mongo
     volumes:
       - ${WEBAPP_STORAGE_HOME}/site:/data/db
-      #- ./data:/data/db
     ports:
       - "27017:27017"
   question-generator-server:
     build: ./QuizRTapi
     labels:
       SERVICE_7001_NAME: QuestionGenerator
-    # environment:
-      # - ASPNETCORE_ENVIRONMENT=Development
-    #   SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
     depends_on:
-      # - question-generator-db
       - question-generator-mongo
       - rabbitmq
     ports:
       - "7001"
   rabbitmq:
     image: "rabbitmq:3-management"
-    # hostname: "rabbit1"
     environment:
-      # RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      # RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - "15672:15672"
       - "5672:5672"
-    # labels:
-    #   NAME: "rabbitmq1"
-    # volumes:
-    #   - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
-version: "3"
