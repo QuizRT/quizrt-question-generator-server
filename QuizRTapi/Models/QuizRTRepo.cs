@@ -242,7 +242,7 @@ namespace QuizRT.Models{
         public void PublishTopic(string newTopicAdded)
         {
             Console.WriteLine("------Going Rabbit------");
-            var factory = new ConnectionFactory() { HostName = "rabbitmq" };
+            var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "rabbitmq", Password = "rabbitmq" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
