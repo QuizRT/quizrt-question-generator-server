@@ -21,12 +21,13 @@ services:
     # environment:
       # - ASPNETCORE_ENVIRONMENT=Development
     #   SQLSERVER_HOST: Server=db;Database=Quiztest1DBLinux;User=sa;Password=Your_password123
-    links:
+    depends_on:
       # - question-generator-db
       - question-generator-mongo
+      - rabbitmq
     ports:
       - "7001"
-  rabbit:
+  rabbitmq:
     image: "rabbitmq:3-management"
     # hostname: "rabbit1"
     environment:
