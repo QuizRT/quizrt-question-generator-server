@@ -102,7 +102,7 @@ namespace QuizRT.Models{
                     int increaser = 0;
                     for(int j=iteratorForListOfOptions; j<3+increaser; j++)
                     {
-                        if(!(otherOptionsList[j][0] == 'Q' && IsDigitsOnly(otherOptionsList[j].Substring(1))))
+                        if(otherOptionsList[j] != "" && !(otherOptionsList[j][0] == 'Q' && IsDigitsOnly(otherOptionsList[j].Substring(1))))
                         {
                             OtherOptions otherOptionObject = new OtherOptions();
                             otherOptionObject.Option = otherOptionsList[j];
