@@ -51,17 +51,12 @@ namespace QuizRTapi
 
             // For MongoDb Connection String
             services.Configure<MongoDBSettings>( options => {
-                Console.WriteLine("---------MongoDBSettings----------");
+                Console.WriteLine("--MongoDBSettings--");
                 options.ConnectionString = Configuration.GetSection("MongoDb:ConnectionString").Value;
                 options.Database = Configuration.GetSection("MongoDb:Database").Value;
                 options.Container = Configuration.GetSection("MongoDb:Container").Value;
                 options.IsContained  = Configuration["DOTNET_RUNNING_IN_CONTAINER"] != null;
                 options.Development = HostingEnvironment.IsDevelopment();   // For Mongo Config Env Variable
-                Console.WriteLine("---------"+options.ConnectionString+"---------");
-                Console.WriteLine("---------"+options.Database+"---------");
-                Console.WriteLine("---------"+options.Container+"---------");
-                Console.WriteLine("---------"+options.IsContained+"---------");
-                Console.WriteLine("---------"+options.Development+"---------");
             });
             services.AddScoped<IGameContext, QuizRTContext>();
 
@@ -120,7 +115,7 @@ namespace QuizRTapi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Question Generator V1");
-                c.RoutePrefix = string.Empty;
+                // c.RoutePrefix = string.Empty;
             });
 
             // app.UseHttpsRedirection();

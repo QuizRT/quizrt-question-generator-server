@@ -68,13 +68,10 @@ namespace QuizRT.Models{
                 ObjectId currentTemplateId = insertedTemplate.Id;
                 bool check = await InsertQuestionsAndOptions(qT,currentTemplateId);
                 if(check)
-                {   Console.WriteLine("-------Inserted Mongo ------- {0} --------",qT.TopicName);
-                    getPresentTopics.ForEach(i => Console.Write("-- {0}\t", i));
-                    Console.WriteLine("------ Val - {0} ------",getPresentTopics.Contains(qT.TopicName, StringComparer.OrdinalIgnoreCase));
-                    // if (!getPresentTopics.Any(str => str.Contains(qT.TopicName)))
+                {
+                    // getPresentTopics.ForEach(i => Console.Write("-- {0}\t", i));
                     if (!getPresentTopics.Contains(qT.TopicName, StringComparer.OrdinalIgnoreCase))
                     {
-                        Console.WriteLine("------{0} Publishing------",qT.TopicName);
                         PublishTopic(qT.TopicName);
                     }
                     return true;
@@ -95,29 +92,39 @@ namespace QuizRT.Models{
             string replacementStrObject = '('+GetBetween(q.Text,"(",")")+')';
             for(int i=0; i<listOfSubjectForQuestion.Count; i++)
             {
-                string questionText = q.Text;
-                questionText = questionText.Replace(replacementStrObject, q.CategoryName);
-                questionText = questionText.Replace(replacementStrSubject, listOfSubjectForQuestion[i].mainobject);
+                if(!(listOfSubjectForQuestion[i].mainobject[0] == 'Q' && IsDigitsOnly(listOfSubjectForQuestion[i].mainobject.Substring(1)))) {
+                    string questionText = q.Text;
+                    questionText = questionText.Replace(replacementStrObject, q.CategoryName);
+                    questionText = questionText.Replace(replacementStrSubject, listOfSubjectForQuestion[i].mainobject);
 
-                List<OtherOptions> listOfOtherOptions = new List<OtherOptions>();
-                int iteratorForListOfOptions = 0;
-                for(int j=iteratorForListOfOptions; j<3; j++)
-                {
-                    OtherOptions otherOptionObject = new OtherOptions();
-                    otherOptionObject.Option = otherOptionsList[j];
-                    listOfOtherOptions.Add(otherOptionObject);
-                    if(iteratorForListOfOptions+3 < otherOptionsList.Count)
-                        iteratorForListOfOptions++;
-                    else
-                        iteratorForListOfOptions = 0;
+                    List<OtherOptions> listOfOtherOptions = new List<OtherOptions>();
+                    int iteratorForListOfOptions = 0;
+                    int increaser = 0;
+                    for(int j=iteratorForListOfOptions; j<3+increaser; j++)
+                    {
+                        if(!(otherOptionsList[j][0] == 'Q' && IsDigitsOnly(otherOptionsList[j].Substring(1))))
+                        {
+                            OtherOptions otherOptionObject = new OtherOptions();
+                            otherOptionObject.Option = otherOptionsList[j];
+                            listOfOtherOptions.Add(otherOptionObject);
+                            if(iteratorForListOfOptions+3 < otherOptionsList.Count)
+                                iteratorForListOfOptions++;
+                            else
+                                iteratorForListOfOptions = 0;
+                        } 
+                        else
+                        {
+                            increaser++;
+                        }
+                    }
+
+                    Questions questionObject = new Questions();
+                    questionObject.Question = questionText;
+                    questionObject.CorrectOption = listOfSubjectForQuestion[i].predicate;
+                    questionObject.OtherOptionsList = listOfOtherOptions;
+
+                    questionsList.Add(questionObject);
                 }
-
-                Questions questionObject = new Questions();
-                questionObject.Question = questionText;
-                questionObject.CorrectOption = listOfSubjectForQuestion[i].predicate;
-                questionObject.OtherOptionsList = listOfOtherOptions;
-
-                questionsList.Add(questionObject);
             }
             QuestionGeneration questionGeneratedObject = new QuestionGeneration();
             questionGeneratedObject.Id = currentTemplateId;
@@ -131,6 +138,14 @@ namespace QuizRT.Models{
                         ReplaceOneAsync(filter: g => g.Id == questionGeneratedObject.Id, replacement: questionGeneratedObject);
             
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
+        }
+        bool IsDigitsOnly(string str) {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+            return true;
         }
         async Task<List<universal_object>> GetSubjectsForQuestion(string sparQL) { // Generating question related to some object other than occupation
             List<universal_object> universal_list_objects = new List<universal_object>();
@@ -241,7 +256,7 @@ namespace QuizRT.Models{
         }
         public void PublishTopic(string newTopicAdded)
         {
-            Console.WriteLine("------Going Rabbit------");
+            Console.WriteLine("--Going Rabbit--");
             var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "rabbitmq", Password = "rabbitmq" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -263,10 +278,8 @@ namespace QuizRT.Models{
                                     basicProperties: null,
                                     body: body
                 );
-                Console.WriteLine("-----{0} Topic Queued-----", newTopicAdded);
+                Console.WriteLine("--{0} Topic Queued--", newTopicAdded);
             }
-            // Console.WriteLine(" Press [enter] to exit.");
-            // Console.ReadLine();
         }
 
 // ---------------------------------

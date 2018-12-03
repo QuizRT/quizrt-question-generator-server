@@ -10,3 +10,5 @@ dotnet: 2.1
 script:
   - dotnet restore
   - dotnet test QuizRTapi.Tests
+after_success:
+  - /bin/bash ./deploy.sh
