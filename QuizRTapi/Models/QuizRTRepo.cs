@@ -11,6 +11,9 @@ using MongoDB.Bson;
 using RabbitMQ.Client;
 using Newtonsoft.Json;
 using System.Text;
+using TopicEngine.Services;
+
+// using TopicEngine.Services;
 
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
@@ -124,6 +127,11 @@ namespace QuizRT.Models{
                 }
             }
             return false;
+        }
+        public void PublishTopic(string newTopicAdded)
+        {
+            TopicBroadcaster topicBroadcasterProvider = new TopicBroadcaster();
+            topicBroadcasterProvider.BroadcastTopics(newTopicAdded);
         }
         public async Task<bool> InsertQuestionsAndOptions(QuestionGeneration q, ObjectId currentTemplateId) {
             var otherOptionsList = GenerateOtherOptions(q.CategoryName);
@@ -298,33 +306,6 @@ namespace QuizRT.Models{
                     }
                 }
                 return otherOps;
-            }
-        }
-        public void PublishTopic(string newTopicAdded)
-        {
-            Console.WriteLine("--Going Rabbit--");
-            var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "rabbitmq", Password = "rabbitmq" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: "Topic",
-                                    durable: false,
-                                    exclusive: false,
-                                    autoDelete: false,
-                                    arguments: null
-                );
-
-                // String jsonified = JsonConvert.SerializeObject(new List<string>());
-                // byte[] customerBuffer = Encoding.UTF8.GetBytes(jsonified);
-
-                var body = Encoding.UTF8.GetBytes(newTopicAdded);
-
-                channel.BasicPublish(exchange: "",
-                                    routingKey: "Topic",
-                                    basicProperties: null,
-                                    body: body
-                );
-                Console.WriteLine("--{0} Topic Queued--", newTopicAdded);
             }
         }
 
