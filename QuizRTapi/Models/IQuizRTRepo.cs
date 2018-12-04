@@ -9,7 +9,8 @@ namespace QuizRT.Models{
     }
     public interface IQuizRTRepo {
         Task<IEnumerable<QuestionGeneration>> GetAllQuestions();
-        Task<IEnumerable<Questions>> GetQuestionsByTopic(string topicName);
+        Task<IEnumerable<QuestionGeneration>> GetQuestionsByTopic(string topicName);
+        Task<IEnumerable<Questions>> GetNNumberOfQuestionsByTopics(string topicName, int numberOfQuestions);
         Task<bool> DeleteAllQuestions();
         Task<bool> DeleteQuestionsByTopic(string topicName);
         Task<bool> GenerateQuestionsAndOptions(QuestionGeneration qG);

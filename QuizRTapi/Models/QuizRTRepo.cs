@@ -15,7 +15,6 @@ using System.Text;
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
         int NumberOfQuestions = 1000;
-        int fixedQuestionSet = 10;
         static Random random = new Random();
         QuizRTContext context;
         public QuizRTRepo(QuizRTContext _context) {
@@ -25,21 +24,26 @@ namespace QuizRT.Models{
         public async Task<IEnumerable<QuestionGeneration>> GetAllQuestions() {
             return await context.QuestionGenerationCollection.Find(_  => true).ToListAsync();
         }
-        public async Task<IEnumerable<Questions>> GetQuestionsByTopic(string topicName) {
+        public async Task<IEnumerable<QuestionGeneration>> GetQuestionsByTopic(string topicName) {
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.TopicName, topicName);
             var questionCursor = await context.QuestionGenerationCollection.FindAsync(filter);
-            return RandomSetOfQuestionsByTopic(await questionCursor.ToListAsync());
-            // return await questionCursor.ToListAsync();
+            return await questionCursor.ToListAsync();
         }
-        public List<Questions> RandomSetOfQuestionsByTopic(List<QuestionGeneration> allQuestionsGenerationByTopic) {
+        public async Task<IEnumerable<Questions>> GetNNumberOfQuestionsByTopics(string topicName, int numberOfQuestions){
+            FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
+                                                            .Filter.Eq(n => n.TopicName, topicName);
+            var questionCursor = await context.QuestionGenerationCollection.FindAsync(filter);
+            return RandomSetOfQuestionsByTopic(await questionCursor.ToListAsync(), numberOfQuestions);
+        }
+        public List<Questions> RandomSetOfQuestionsByTopic(List<QuestionGeneration> allQuestionsGenerationByTopic, int numberOfQuestions) {
             List<Questions> allQuestionsByTopic = new List<Questions>();
             allQuestionsGenerationByTopic.ForEach(a => {
                 a.QuestionsList.ForEach(b => {
                     allQuestionsByTopic.Add(b);
                 });
             });
-            List<int> uniqueNoList = UniqueRandomNumberList(allQuestionsByTopic.Count, fixedQuestionSet);
+            List<int> uniqueNoList = UniqueRandomNumberList(allQuestionsByTopic.Count, numberOfQuestions);
             List<Questions> setOfRandomQuestionByTopic = new List<Questions>();
             uniqueNoList.ForEach(a => {
                 setOfRandomQuestionByTopic.Add(allQuestionsByTopic[a]);

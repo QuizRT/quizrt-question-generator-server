@@ -30,6 +30,13 @@ namespace QuizRTapi.Controllers
                 return new OkObjectResult(allQuestionsByTopic);
             return NotFound();
         }
+        [HttpGet("questions/{topicname}/{numberofquestions}")]
+        public async Task<IActionResult> GetNNumberOfQuestionsByTopics(string topicname, int numberofquestions) {
+            var nQuestionsByTopic = await quizRTRepo.GetNNumberOfQuestionsByTopics(topicname, numberofquestions);
+            if(nQuestionsByTopic.Count() > 0)
+                return new OkObjectResult(nQuestionsByTopic);
+            return NotFound();
+        }
         [HttpGet("topics")]
         public async Task<IActionResult> GetAllTopics() {
             var listOfTopics = await quizRTRepo.GetAllTopics();
