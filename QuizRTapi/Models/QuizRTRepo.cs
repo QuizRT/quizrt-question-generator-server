@@ -37,17 +37,20 @@ namespace QuizRT.Models{
             return RandomSetOfQuestionsByTopic(await questionCursor.ToListAsync(), numberOfQuestions);
         }
         public List<Questions> RandomSetOfQuestionsByTopic(List<QuestionGeneration> allQuestionsGenerationByTopic, int numberOfQuestions) {
-            List<Questions> allQuestionsByTopic = new List<Questions>();
-            allQuestionsGenerationByTopic.ForEach(a => {
-                a.QuestionsList.ForEach(b => {
-                    allQuestionsByTopic.Add(b);
-                });
-            });
-            List<int> uniqueNoList = UniqueRandomNumberList(allQuestionsByTopic.Count, numberOfQuestions);
             List<Questions> setOfRandomQuestionByTopic = new List<Questions>();
-            uniqueNoList.ForEach(a => {
-                setOfRandomQuestionByTopic.Add(allQuestionsByTopic[a]);
-            });
+            if (allQuestionsGenerationByTopic.Count > 0)
+            {
+                List<Questions> allQuestionsByTopic = new List<Questions>();
+                allQuestionsGenerationByTopic.ForEach(a => {
+                    a.QuestionsList.ForEach(b => {
+                        allQuestionsByTopic.Add(b);
+                    });
+                });
+                List<int> uniqueNoList = UniqueRandomNumberList(allQuestionsByTopic.Count, numberOfQuestions);
+                uniqueNoList.ForEach(a => {
+                    setOfRandomQuestionByTopic.Add(allQuestionsByTopic[a]);
+                });
+            }
             return setOfRandomQuestionByTopic;
         }
         public static List<int> UniqueRandomNumberList(int maxRange, int totalRandomnoCount)    
