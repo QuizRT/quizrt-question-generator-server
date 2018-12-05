@@ -14,7 +14,7 @@ services:
       SERVICE_7001_NAME: QuestionGenerator
     depends_on:
       - question-generator-mongo
-      - rabbitmq
+      # - rabbitmq
     networks:
       - question-generation-network
     ports:
