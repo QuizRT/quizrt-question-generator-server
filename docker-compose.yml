@@ -18,7 +18,7 @@ services:
     networks:
       - question-generation-network
     ports:
-      - "7001"
+      - "7001:7001"
   rabbitmq:
     image: "rabbitmq:3-management"
     environment:
