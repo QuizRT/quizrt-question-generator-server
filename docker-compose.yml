@@ -19,16 +19,16 @@ services:
       - question-generation-network
     ports:
       - "7001:7001"
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    environment:
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-    networks:
-      - question-generation-network
-    ports:
-      - "15672:15672"
-      - "5672:5672"
+  # rabbitmq:
+  #   image: "rabbitmq:3-management"
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: "rabbitmq"
+  #     RABBITMQ_DEFAULT_PASS: "rabbitmq"
+  #   networks:
+  #     - question-generation-network
+  #   ports:
+  #     - "15672:15672"
+  #     - "5672:5672"
 networks:
   question-generation-network:
     name: quizrt-network
