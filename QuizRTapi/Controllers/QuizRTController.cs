@@ -55,6 +55,7 @@ namespace QuizRTapi.Controllers
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> PostQuestionsAndOptoins([FromBody] QuestionGeneration qG){
+            Console.WriteLine("cameeeee");
             bool statusOfQuestionPost = await quizRTRepo.GenerateQuestionsAndOptions(qG);
             if( statusOfQuestionPost )
                 return new NoContentResult();
