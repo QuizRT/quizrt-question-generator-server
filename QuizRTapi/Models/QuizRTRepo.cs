@@ -121,7 +121,6 @@ namespace QuizRT.Models{
             Assign1.TopicName =  Assign[0].TopicName;
             Assign1.CategoryId =  Assign[0].CategoryId;
             Assign1.TopicId =  Assign[0].TopicId;
-
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteOneAsync(filter);
             if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
