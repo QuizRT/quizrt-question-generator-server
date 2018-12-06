@@ -13,8 +13,6 @@ using Newtonsoft.Json;
 using System.Text;
 using TopicEngine.Services;
 
-// using TopicEngine.Services;
-
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
         int NumberOfQuestions = 1000;
