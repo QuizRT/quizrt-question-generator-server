@@ -145,6 +145,7 @@ namespace QuizRT.Models{
             }
 
             Console.WriteLine("no renewal==========");
+            return true;
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.Text, qT.Text);
             var checkForTemplate = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
