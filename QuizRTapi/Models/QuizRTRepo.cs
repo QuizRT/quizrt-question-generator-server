@@ -88,19 +88,26 @@ namespace QuizRT.Models{
 
 
         public async Task<bool> DeleteAllQuestions() {
+            List<string> all_topics = await GetAllTopics();
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_ => true);
             if ( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
+                TopicBroadcaster topicBroadcaster_all_deleted  = new TopicBroadcaster();
+                topicBroadcaster_all_deleted.Publish_All_Topics_as_deleted(all_topics);
+                Console.WriteLine("All the topics are deleted --------------");
                 return true;
             }
             return false;
         }
-        public async Task<bool> DeleteQuestionsByTopic(string topicNmae) {
+        public async Task<bool> DeleteQuestionsByTopic(string topicName) {
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
-                                                            .Filter.Eq(m => m.TopicName, topicNmae);
+                                                            .Filter.Eq(m => m.TopicName, topicName);
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(filter);
             if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
+                TopicBroadcaster topicBroadcaster_deleted_single  = new TopicBroadcaster();
+                 topicBroadcaster_deleted_single.PublishTopic_as_deleted(topicName);
+                 Console.WriteLine("----------------"+topicName+" deleted --------------");
                 return true;
             }
             return false;
