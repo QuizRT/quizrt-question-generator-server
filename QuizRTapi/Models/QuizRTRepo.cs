@@ -124,8 +124,10 @@ namespace QuizRT.Models{
             Assign1.TopicName =  Assign[0].TopicName;
             Assign1.CategoryId =  Assign[0].CategoryId;
             Assign1.TopicId =  Assign[0].TopicId;
+            Console.WriteLine("assigned to another object-----------");
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteOneAsync(filter);
             if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
+                Console.WriteLine("deleted the template from the database======");
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
                 return Assign1;
             }
@@ -134,12 +136,15 @@ namespace QuizRT.Models{
         public async Task<bool> GenerateQuestionsAndOptions(QuestionGeneration qT) {
             if(qT.CategoryName=="" && qT.TopicName=="")
             {
+                Console.WriteLine("Entered for the renewal---------");
                 QuestionGeneration delete_result = await Delete_specific_Template(qT.Text);
                 if(delete_result!=null)
                  qT = delete_result;
                 else
                  return false;
             }
+
+            Console.WriteLine("no renewal==========");
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.Text, qT.Text);
             var checkForTemplate = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
