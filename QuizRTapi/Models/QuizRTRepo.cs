@@ -124,7 +124,7 @@ namespace QuizRT.Models{
             Dublicate_copy.TopicId =  Selected_object[0].TopicId;
             Console.WriteLine("assigned to another object-----------");
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteOneAsync(filter);
-            if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
+            if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ) {
                 //Console.WriteLine("deleted the template from the database======");
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
                 return Dublicate_copy;
