@@ -84,6 +84,8 @@ namespace QuizRT.Models{
             var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
             return await templateCursor.ToListAsync();
         }
+
+
         public async Task<bool> DeleteAllQuestions() {
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteManyAsync(_ => true);
             if ( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
@@ -102,7 +104,40 @@ namespace QuizRT.Models{
             }
             return false;
         }
+
+
+        public async Task<QuestionGeneration> Delete_specific_Template(string text) {
+            //var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
+            List<QuestionGeneration> Assign = new List<QuestionGeneration>();
+            QuestionGeneration Assign1 = new QuestionGeneration();
+
+            FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
+                                                          .Filter.Eq(m => m.Text, text);
+            var questionCursor = await context.QuestionGenerationCollection.FindAsync(filter);
+            Assign = await questionCursor.ToListAsync();
+
+            Assign1.CategoryName =  Assign[0].CategoryName;
+            Assign1.Text =  Assign[0].Text;
+            Assign1.TopicName =  Assign[0].TopicName;
+            Assign1.CategoryId =  Assign[0].CategoryId;
+            Assign1.TopicId =  Assign[0].TopicId;
+
+            DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteOneAsync(filter);
+            if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
+                Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
+                return Assign1;
+            }
+            return null;
+        }
         public async Task<bool> GenerateQuestionsAndOptions(QuestionGeneration qT) {
+            if(qT.CategoryName=="" && qT.TopicName=="")
+            {
+                QuestionGeneration delete_result = await Delete_specific_Template(qT.Text);
+                if(delete_result!=null)
+                 qT = delete_result;
+                else
+                 return false;
+            }
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.Text, qT.Text);
             var checkForTemplate = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
