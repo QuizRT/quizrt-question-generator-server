@@ -109,27 +109,27 @@ namespace QuizRT.Models{
         }
 
 
-        public async Task<QuestionGeneration> Delete_specific_Template(string text) {
+        public async Task<QuestionGeneration> Do_Regenerate_Template(string text) {
             //var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
-            List<QuestionGeneration> Assign = new List<QuestionGeneration>();
-            QuestionGeneration Assign1 = new QuestionGeneration();
+            List<QuestionGeneration> Selected_object = new List<QuestionGeneration>();
+            QuestionGeneration Dublicate_copy = new QuestionGeneration();
 
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                           .Filter.Eq(m => m.Text, text);
             var questionCursor = await context.QuestionGenerationCollection.FindAsync(filter);
-            Assign = await questionCursor.ToListAsync();
+            Selected_object = await questionCursor.ToListAsync();
 
-            Assign1.CategoryName =  Assign[0].CategoryName;
-            Assign1.Text =  Assign[0].Text;
-            Assign1.TopicName =  Assign[0].TopicName;
-            Assign1.CategoryId =  Assign[0].CategoryId;
-            Assign1.TopicId =  Assign[0].TopicId;
+            Dublicate_copy.CategoryName =  Selected_object[0].CategoryName;
+            Dublicate_copy.Text =  Selected_object[0].Text;
+            Dublicate_copy.TopicName =  Selected_object[0].TopicName;
+            Dublicate_copy.CategoryId =  Selected_object[0].CategoryId;
+            Dublicate_copy.TopicId =  Selected_object[0].TopicId;
             Console.WriteLine("assigned to another object-----------");
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteOneAsync(filter);
             if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
-                Console.WriteLine("deleted the template from the database======");
+                //Console.WriteLine("deleted the template from the database======");
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
-                return Assign1;
+                return Dublicate_copy;
             }
             return null;
         }
@@ -137,15 +137,14 @@ namespace QuizRT.Models{
             if(qT.CategoryName=="" && qT.TopicName=="")
             {
                 Console.WriteLine("Entered for the renewal---------");
-                QuestionGeneration delete_result = await Delete_specific_Template(qT.Text);
+                QuestionGeneration delete_result = await Do_Regenerate_Template(qT.Text);
                 if(delete_result!=null)
                  qT = delete_result;
                 else
                  return false;
             }
 
-            Console.WriteLine("no renewal==========");
-            return true;
+            Console.WriteLine("Finished  Renewal  Check");
             FilterDefinition<QuestionGeneration> filter = Builders<QuestionGeneration>
                                                             .Filter.Eq(m => m.Text, qT.Text);
             var checkForTemplate = await context.QuestionGenerationCollection.Find(filter).FirstOrDefaultAsync();
