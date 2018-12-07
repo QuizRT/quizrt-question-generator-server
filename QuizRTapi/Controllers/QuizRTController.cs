@@ -46,10 +46,10 @@ namespace QuizRTapi.Controllers
         }
         [HttpGet("templates")]
         public async Task<IActionResult> GetTemplates(){
-            var listOfTemplates = await quizRTRepo.GetTemplate();
+            List<Questions> listOfTemplates = await quizRTRepo.GetTemplate();
             if( listOfTemplates.Count() > 0 )
             {
-                Console.WriteLine(listOfTemplates+"-------------------");
+                Console.WriteLine(listOfTemplates[0]+"-------------------");
                 return new OkObjectResult(listOfTemplates);
             }    
             return NotFound();
