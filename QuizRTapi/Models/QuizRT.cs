@@ -53,4 +53,11 @@ namespace QuizRT.Models{
         public string mainobject {get;set;}
         public string predicate {get;set;}
     }
+
+    public class List_template_corresponding_ques {
+        public string template {get;set;}
+        public List<Questions> Coressponding_questions {get;set;}
+        public  Questions Single_Question {get;set;}
+
+    }
 }

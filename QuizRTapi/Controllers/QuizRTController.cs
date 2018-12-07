@@ -47,22 +47,22 @@ namespace QuizRTapi.Controllers
         [HttpGet("templates")]
         public async Task<IActionResult> GetTemplates(){
             //var v1 = await quizRTRepo.GetTemplate();
-            List<Questions> sample_questions = new List<Questions>();
-            List<List<Questions>> listOfTemplates = await quizRTRepo.GetTemplate();
+            List<List_template_corresponding_ques> return_sample_questions = new List<List_template_corresponding_ques>();
+            List<List_template_corresponding_ques> listOfTemplates = await quizRTRepo.List_template_corresponding_ques();
             if( listOfTemplates.Count() > 0 )
             {
                 Console.WriteLine(listOfTemplates.Count+"{}}-------------------");
                // Console.WriteLine(v1);
-                Console.WriteLine(listOfTemplates[0][0].Question+"first value-------------------");
+                //Console.WriteLine(listOfTemplates[0][0].Question+"first value-------------------");
                 for(int i=0;i<listOfTemplates.Count;i++)
                 {
                     if(listOfTemplates[i]!=null)
                     {
-                     Console.WriteLine(listOfTemplates[i][0].Question+"first value-------------------");
-                    sample_questions.Add(listOfTemplates[i][0]);
+                     Console.WriteLine(listOfTemplates[i].template+"first value-------------------");
+                    listOfTemplates[i].Single_Question = listOfTemplates[i].Coressponding_questions[0];
                     }
                 }
-                return new OkObjectResult(sample_questions);
+                return new OkObjectResult(listOfTemplates);
             }    
             return NotFound();
         }

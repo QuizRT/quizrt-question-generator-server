@@ -83,8 +83,42 @@ namespace QuizRT.Models{
             var topicCursor = await context.QuestionGenerationCollection.DistinctAsync<string>("TopicName", filter);
             return await topicCursor.ToListAsync();
         }
-        public async Task<List<List<Questions>>> GetTemplate() {
+
+        public async Task<List<string>> GetTemplate() {
+            var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
+            // var template = context.QuestionGenerationCollection.Find(_ => true).Project(u =>u.Text && u.Text);
+        //      var zooWithAnimalFilter = Builders<Zoo>.Filter
+        // .ElemMatch(z => z.Animals, a => a.Name == animalName);
+            Console.WriteLine(templateCursor+"000000000000");
+            return await templateCursor.ToListAsync();
+        }
+
+        public async Task<List<List_template_corresponding_ques>> List_template_corresponding_ques()
+        {
+            List<List_template_corresponding_ques> temp = new List<List_template_corresponding_ques>();
+            
+            List<List<Questions>> t1 = await Getfirst_question_as_sample();
+            List<string> t2 = await GetTemplate();
+
+            for(int i=0;i< t2.Count;i++)
+            {
+                if(t1[i]!=null)
+                {
+                List_template_corresponding_ques dummy = new List_template_corresponding_ques();
+                dummy.Coressponding_questions = t1[i];
+                dummy.template = t2[i];
+                temp.Add(dummy);
+                }
+            }
+
+            return temp;
+        }
+
+
+
+        public async Task<List<List<Questions>>> Getfirst_question_as_sample() {
             var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.QuestionsList);
+            // var template = context.QuestionGenerationCollection.Find(_ => true).Project(u =>u.Text && u.Text);
         //      var zooWithAnimalFilter = Builders<Zoo>.Filter
         // .ElemMatch(z => z.Animals, a => a.Name == animalName);
             Console.WriteLine(templateCursor+"000000000000");
