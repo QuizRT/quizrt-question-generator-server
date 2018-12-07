@@ -52,7 +52,7 @@ namespace QuizRTapi.Controllers
             {
                 Console.WriteLine(listOfTemplates.Count+"{}}-------------------");
                // Console.WriteLine(v1);
-                Console.WriteLine(listOfTemplates[0]+"first value-------------------");
+                Console.WriteLine(listOfTemplates+"first value-------------------");
                 return new OkObjectResult(listOfTemplates);
             }    
             return NotFound();
