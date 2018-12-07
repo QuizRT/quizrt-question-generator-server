@@ -47,7 +47,7 @@ namespace QuizRTapi.Controllers
         [HttpGet("templates")]
         public async Task<IActionResult> GetTemplates(){
             //var v1 = await quizRTRepo.GetTemplate();
-            List<List_template_corresponding_ques> return_sample_questions = new List<List_template_corresponding_ques>();
+
             List<List_template_corresponding_ques> listOfTemplates = await quizRTRepo.List_template_corresponding_ques();
             if( listOfTemplates.Count() > 0 )
             {
