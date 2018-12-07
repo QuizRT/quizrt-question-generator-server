@@ -56,8 +56,11 @@ namespace QuizRTapi.Controllers
                 Console.WriteLine(listOfTemplates[0][0].Question+"first value-------------------");
                 for(int i=0;i<listOfTemplates.Count;i++)
                 {
+                    if(listOfTemplates[i]!=null)
+                    {
                      Console.WriteLine(listOfTemplates[i][0].Question+"first value-------------------");
-                    //sample_questions.Add(listOfTemplates[i][0]);
+                    sample_questions.Add(listOfTemplates[i][0]);
+                    }
                 }
                 return new OkObjectResult(sample_questions);
             }    
