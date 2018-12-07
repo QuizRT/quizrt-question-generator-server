@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using System.Text;
 using TopicEngine.Services;
 
+// using TopicEngine.Services;
+
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
         int NumberOfQuestions = 1000;
@@ -43,11 +45,9 @@ namespace QuizRT.Models{
             {
                 List<Questions> allQuestionsByTopic = new List<Questions>();
                 allQuestionsGenerationByTopic.ForEach(a => {
-                    if(a.QuestionsList != null){
-                        a.QuestionsList.ForEach(b => {
-                            allQuestionsByTopic.Add(b);
-                        });
-                    }
+                    a.QuestionsList.ForEach(b => {
+                        allQuestionsByTopic.Add(b);
+                    });
                 });
                 List<int> uniqueNoList = UniqueRandomNumberList(allQuestionsByTopic.Count, numberOfQuestions);
                 uniqueNoList.ForEach(a => {
@@ -83,9 +83,11 @@ namespace QuizRT.Models{
             var topicCursor = await context.QuestionGenerationCollection.DistinctAsync<string>("TopicName", filter);
             return await topicCursor.ToListAsync();
         }
-        public async Task<List<Questions>> GetTemplate() {
-            var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.QuestionsList[0]);
-            Console.WriteLine(templateCursor+"\\\\\\\\\\\\\\\\\\\\\\\\");
+        public async Task<List<List<Questions>>> GetTemplate() {
+            var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.QuestionsList);
+        //      var zooWithAnimalFilter = Builders<Zoo>.Filter
+        // .ElemMatch(z => z.Animals, a => a.Name == animalName);
+            Console.WriteLine(templateCursor+"000000000000");
             return await templateCursor.ToListAsync();
         }
 
@@ -134,7 +136,7 @@ namespace QuizRT.Models{
             Dublicate_copy.TopicId =  Selected_object[0].TopicId;
             Console.WriteLine("assigned to another object-----------");
             DeleteResult deleteResult = await context.QuestionGenerationCollection.DeleteOneAsync(filter);
-            if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ) {
+            if( deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0 ){
                 //Console.WriteLine("deleted the template from the database======");
                 Console.WriteLine(deleteResult.DeletedCount+" Items Deleted.");
                 return Dublicate_copy;
