@@ -85,6 +85,7 @@ namespace QuizRT.Models{
         }
         public async Task<List<Questions>> GetTemplate() {
             var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.QuestionsList[0]);
+            Console.WriteLine(templateCursor+"\\\\\\\\\\\\\\\\\\\\\\\\");
             return await templateCursor.ToListAsync();
         }
 
