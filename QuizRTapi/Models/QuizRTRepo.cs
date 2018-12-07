@@ -83,8 +83,8 @@ namespace QuizRT.Models{
             var topicCursor = await context.QuestionGenerationCollection.DistinctAsync<string>("TopicName", filter);
             return await topicCursor.ToListAsync();
         }
-        public async Task<List<string>> GetTemplate() {
-            var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
+        public async Task<List<Questions>> GetTemplate() {
+            var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.QuestionsList[0]);
             return await templateCursor.ToListAsync();
         }
 
