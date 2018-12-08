@@ -237,25 +237,28 @@ namespace QuizRT.Models{
                     questionText = questionText.Replace(replacementStrSubject, listOfSubjectForQuestion[i].mainobject);
 
                     List<OtherOptions> listOfOtherOptions = new List<OtherOptions>();
-                    int iteratorForListOfOptions = 0;
+                    // int iteratorForListOfOptions = 0;
                     int increaser = 0;
-                    for(int j=iteratorForListOfOptions; j<3+increaser; j++)
+                    // otherOptionsList = otherOptionsList.GetRange(1, otherOptionsList.Count).Append(otherOptionsList.First()).ToList(); 
+
+                    for(int j=0; j<3+increaser; j++)
                     {
                         if(otherOptionsList[j] != "" && !(otherOptionsList[j][0] == 'Q' && IsDigitsOnly(otherOptionsList[j].Substring(1))))
                         {
                             OtherOptions otherOptionObject = new OtherOptions();
                             otherOptionObject.Option = otherOptionsList[j];
                             listOfOtherOptions.Add(otherOptionObject);
-                            if(iteratorForListOfOptions+3 < otherOptionsList.Count)
-                                iteratorForListOfOptions++;
-                            else
-                                iteratorForListOfOptions = 0;
+                            // if(iteratorForListOfOptions+3 < otherOptionsList.Count)
+                            //     iteratorForListOfOptions++;
+                            // else
+                            //     iteratorForListOfOptions = 0;
                         } 
                         else
                         {
                             increaser++;
                         }
                     }
+                    otherOptionsList = Shift(otherOptionsList);
 
                     Questions questionObject = new Questions();
                     questionObject.Question = questionText;
@@ -277,6 +280,10 @@ namespace QuizRT.Models{
                         ReplaceOneAsync(filter: g => g.Id == questionGeneratedObject.Id, replacement: questionGeneratedObject);
             
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
+        }
+        static List<T> Shift<T>(List<T> list)
+        {
+            return list.GetRange(1, list.Count - 1).Append(list.First()).ToList();
         }
         bool IsDigitsOnly(string str) {
             foreach (char c in str)
