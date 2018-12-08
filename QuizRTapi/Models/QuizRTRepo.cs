@@ -45,9 +45,11 @@ namespace QuizRT.Models{
             {
                 List<Questions> allQuestionsByTopic = new List<Questions>();
                 allQuestionsGenerationByTopic.ForEach(a => {
-                    a.QuestionsList.ForEach(b => {
-                        allQuestionsByTopic.Add(b);
-                    });
+                    if(a.QuestionsList != null){
+                        a.QuestionsList.ForEach(b => {
+                            allQuestionsByTopic.Add(b);
+                        });
+                    }
                 });
                 List<int> uniqueNoList = UniqueRandomNumberList(allQuestionsByTopic.Count, numberOfQuestions);
                 uniqueNoList.ForEach(a => {
