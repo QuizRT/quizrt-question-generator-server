@@ -107,7 +107,7 @@ namespace QuizRT.Models{
                 if(t1[i]!=null)
                 {
                 List_template_corresponding_ques dummy = new List_template_corresponding_ques();
-                dummy.Coressponding_questions = t1[i];
+                dummy.Coressponding_questions = t1[i].GetRange(0,10);
                 dummy.template = t2[i];
                 temp.Add(dummy);
                 }
