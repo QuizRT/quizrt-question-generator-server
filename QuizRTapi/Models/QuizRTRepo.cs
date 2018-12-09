@@ -17,7 +17,7 @@ using TopicEngine.Services;
 
 namespace QuizRT.Models{
     public class QuizRTRepo : IQuizRTRepo {
-        int NumberOfQuestions = 1000;
+        int NumberOfQuestions = 10000;
         static Random random = new Random();
         QuizRTContext context;
         public QuizRTRepo(QuizRTContext _context) {
