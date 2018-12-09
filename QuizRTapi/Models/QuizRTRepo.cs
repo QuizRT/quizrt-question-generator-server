@@ -89,9 +89,8 @@ namespace QuizRT.Models{
         public async Task<List<string>> GetTemplate() {
             var templateCursor = context.QuestionGenerationCollection.Find(_ => true).Project(u => u.Text);
             // var template = context.QuestionGenerationCollection.Find(_ => true).Project(u =>u.Text && u.Text);
-        //      var zooWithAnimalFilter = Builders<Zoo>.Filter
-        // .ElemMatch(z => z.Animals, a => a.Name == animalName);
-            Console.WriteLine(templateCursor+"000000000000");
+            //      var zooWithAnimalFilter = Builders<Zoo>.Filter
+            // .ElemMatch(z => z.Animals, a => a.Name == animalName);
             return await templateCursor.ToListAsync();
         }
 
@@ -107,7 +106,10 @@ namespace QuizRT.Models{
                 if(t1[i]!=null)
                 {
                 List_template_corresponding_ques dummy = new List_template_corresponding_ques();
-                dummy.Coressponding_questions = t1[i].GetRange(0,10);
+                if(t1[i].Count < 10)
+                    dummy.Coressponding_questions = t1[i].GetRange(0,t1[i].Count);
+                else
+                    dummy.Coressponding_questions = t1[i].GetRange(0,10);
                 dummy.template = t2[i];
                 temp.Add(dummy);
                 }
