@@ -11,5 +11,6 @@ Run `dotnet run` inside directory QuizRTapi. Navigate to `http://localhost:5000/
 Navigate to QuizRTapi.Tests -
 Run `dotnet test` to execute the unit tests via [CIRCLE CI](https://github.com/circleci).
 
-# QuizRT Server Description
-This server feeds enormous questions and options to a Real Time Quiz Game. API written in .NET Core, backed by mongoDB documents to store our templates, questions generated on certain category (say cricket) under a topic (say sports) on top of these templates, also stores relevant wrong answers one among is corect based on these category and topic (crickets in sports). This model uses data source as Wikidata and query language SparQL to hit there API endpoint and collects raw data later using these and provided template to frames the hundred thousands of questions and join each of them with thousands alternating options that are different every time.
+## QuizRT Server Description
+This server feeds enormous questions and options to a Real Time Quiz Game. API is written in .NET Core, backed by mongoDB documents to store our templates, questions generated on certain category (say cricket) under a topic (say sports) on top of these templates, also stores relevant wrong answers one among is corect based on these category and topic (crickets in sports). This model uses data source as Wikidata and query language SparQL to hit there API endpoint and collects raw data later using these and provided template to frame hundred thousands of questions and join each of them with thousands of alternating options that are different every time.
+Other tools used circleci and docker.
